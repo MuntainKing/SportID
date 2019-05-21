@@ -2,7 +2,9 @@ package com.smartrfid.sportid;
 
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -44,11 +46,13 @@ public class NewServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
+	request.setCharacterEncoding("UTF-8");
 	current = Calendar.getInstance();
     current.setTime(new Date());
     String timeStr = String.format("%d:%02d:%02d", current.get(Calendar.HOUR), current.get(Calendar.MINUTE),current.get(Calendar.SECOND));
 		
 	response.setContentType("text/plain");
+	response.setContentType("text/html; charset=utf-8");
 	String fullname = request.getParameter("fullname");
 	System.out.println("Command: "+ fullname + " " + timeStr);
 
@@ -96,8 +100,11 @@ public class NewServlet extends HttpServlet {
 						"	</tr>");
 			}
 			out.print("</table>");
-		}
+		} else out.print("<table><tr>"
+				+ "<td><p>№</p></td>"
+				+ "<td><p><strong><em>EPC</em></strong></p></td>"
+				+ "<td><p><strong><em>Last seen</em></strong></p></td>"
+				+ "</tr></table> ");
 		}
 	}
-
 }

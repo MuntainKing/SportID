@@ -5,7 +5,7 @@
 <head>
 
 <title>Demo Ajax</title>
-<link rel='stylesheet' id='theme-style-css'  href='/SportID/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='theme-style-css'  href='/SportID/tag/style.css' type='text/css' media='all' />
 <script type="text/javascript" src="/SportID/js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -49,13 +49,20 @@
 	<br>
 	<span id="result1"></span>
 </form>
-
-
-<a href="https://www.w3schools.com">
-<img src="/SportID/images/black-web-button.png" alt="Go to W3Schools!" width="42" height="42" border="0">
+<div class = "nav-container">
+<div class = "centered">
+<a class = "nav-element" href="/SportID/">
+Назад
 </a>
+</div>
+</div>
+<div class = "container">
+<div class = "column">
 
 
+</div><!--column1 -->
+
+<div class = "column">
 <div id="ajaxresponse">
 <table>
 	<tr>
@@ -69,33 +76,13 @@
 			<p><strong><em>Last seen</em></strong></p>
 		</td>
 	</tr>
-	<!--<tr>
-		<td>
-			<p>1.</p>
-		</td>
-		<td>
-			<p>Профаза</p>
-		</td>
-		<td>
-			<p>В профазе митоза происходит растворение ядерной оболочки и ядрышка, центриоли расходятся к разным полюсам, начинается формирование микротрубочек, так называемых нитей веретена деления, конденсируются хроматиды в хромосомах.</p>
-		</td>
-	</tr>
-	
-	<tr>
-		<td>
-			<p>2.</p>
-		</td>
-		<td>
-			<p>Метафаза</p>
-		</td>
-		<td>
-			<p>ляютсямежду полюсами.</p>-
-		</td>
-	</tr>-->
-
 </table>
 </div>
 </div>
 
+<div class = "column">
+</div>
+</div>
+</div>
 </body>
 </html>
