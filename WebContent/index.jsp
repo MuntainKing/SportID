@@ -25,7 +25,7 @@
 Метки
 </a>
 
-<a class = "nav-element" href="/SportID/">
+<a class = "nav-element" href="/SportID/register/">
 Регистрация
 </a>
 
