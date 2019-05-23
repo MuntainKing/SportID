@@ -1,7 +1,9 @@
 * {
   box-sizing: border-box;
 }
-
+body{
+	margin:auto;
+}
 #topcontainer{
 	margin-left: auto;
     margin-right: auto;
@@ -63,6 +65,7 @@ table{
 	cursor: pointer;
 	display: inline-block;
 	width:25%;
+	border: 1px solid #c6cfd6;
 }
 
 .nav-element:hover, .nav-element:active {

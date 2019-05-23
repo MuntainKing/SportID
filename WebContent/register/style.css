@@ -14,7 +14,7 @@ input[type=text], select {
 
 input[type=submit] {
   width: 100%;
-  background-color: #4CAF50;
+  background-color: #9d0000;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -24,20 +24,58 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-  background-color: #45a049;
+  background-color: #dd0000;
 }
-
-
 
 .centered{
 	margin-left: auto;
     margin-right: auto;
-    padding-top : 25px;
-    width: 40%;
+    padding : 15px;
+    width: 45%;
+    overflow: auto;
+}
+
+body{
+	margin:auto;
+}
+
+#pageTitle{
+	color: white;
+	text-align: center;
+	font-size:45px;
+	margin: 5px
+}
+.senslistcont{
+	height : 250px;
+	background-color : black;
+	width: 100%;
+	overflow : scroll;
+}
+
+tr:first-child{
+	background-color: #f3f3f3;	
+}
+
+table td{
+	padding: 0px 5px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #c6cfd6;
+    font-size: 14px;
+	min-width: 10em;
+	
+}
+
+table{
+	border-collapse:collapse;
+}
+
+tr:nth-child(2){
+	background-color: #e4f223;	
 }
 
 .nav-container{
-	height : 100px;
+	height : 7%;
 	background-color : black;
 	width: 100%;
 }
@@ -56,6 +94,8 @@ input[type=submit]:hover {
 	cursor: pointer;
 	display: inline-block;
 	width:25%;
+	width: 33.3%;
+	border: 1px solid #c6cfd6;
 }
 
 .nav-element:hover, .nav-element:active {
@@ -67,7 +107,7 @@ input[type=submit]:hover {
   float: left;
   width: 33.33%;
   padding: 10px;
-  height: 300px; /* Should be removed. Only for demonstration */
+  /*height: 300px;*/ /* Should be removed. Only for demonstration */
 }
 
 /* Clear floats after the columns */
@@ -75,6 +115,11 @@ input[type=submit]:hover {
   content: "";
   display: table;
   clear: both;
+}
+
+.competitors-table-container{
+	width:100%;
+	display: inline-block
 }
 
 button {

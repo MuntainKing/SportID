@@ -13,21 +13,40 @@ public class ReaderController implements IAsynchronousMessage {
 	String[] RegSensList = new String[40];
 	String[] RegCurrList = new String[40];
 	String[] RegSensLastSeen = new String[40];
+	
     int UniqueEPCount = 0;
     int RegListCount = 0;
     boolean UniqueEPCTag = false;
     boolean UniqueRegTag = false;
+    boolean registration = false;
     boolean conn = false;
     Calendar CurTime;
+    int[] CurrTime = new int[3];
+    int[] CheckTime = new int[3];
+    int[] PassedTime = new int[3];
+    int[] ParsedTime = new int[3];
     
     static String tcpParam = "192.168.1.116:9090";
     static String commParam = "COM4:115200";
     
     public void saveSensList() {
     	RegSensList = UniqueEPC;
-    	
+    	registration = true;
     }
     
+    public String getRegEPC(int num) {
+    	if (RegListCount < num) {return null;}
+    	else return RegSensList[num];
+    }
+    
+    public String getRegTimestamp(int num) {
+    	if (RegListCount < num) {return null;}
+    	else return RegSensLastSeen[num];
+    }
+    
+    public int getRegListCount() {
+    	return RegListCount;
+    }
     
     public ReaderController() {
     	//TCPConnect();
@@ -109,36 +128,85 @@ public class ReaderController implements IAsynchronousMessage {
 //	public static void main(String[] args) {
 //	        new ReaderController();
 //	}
+    
+    public void checkExpired() {
+		boolean expired = false;
+		int expiredNum = 0;	
+		if (RegListCount > 0) {
+			CurTime = Calendar.getInstance();
+			CurTime.setTime(new Date());
+			CheckTime[0] = CurTime.get(Calendar.HOUR_OF_DAY);
+			CheckTime[1] = CurTime.get(Calendar.MINUTE);
+			CheckTime[2] = CurTime.get(Calendar.SECOND);
+			
+			for(int index = 0; index < RegListCount; ++index) {
+				String[] pairs = RegSensLastSeen[index].split(":");			
+				for (int i = 0; i < pairs.length; i++) {
+					ParsedTime[0] = Integer.parseInt(pairs[0]);
+					ParsedTime[1] = Integer.parseInt(pairs[1]);
+					ParsedTime[2] = Integer.parseInt(pairs[2]);
+				}
+				PassedTime[0] = CheckTime[0] - ParsedTime[0];
+				PassedTime[1] = CheckTime[1] - ParsedTime[1];
+				PassedTime[2] = CheckTime[2] - ParsedTime[2];
+				if (PassedTime[1] < 0) {
+					PassedTime[0]--;
+					PassedTime[1]=PassedTime[1]+60;
+					if (PassedTime[2] < 0) {
+						PassedTime[1]--;
+						PassedTime[2]=PassedTime[2]+60;
+					}
+				}
+				if (PassedTime[0]>0 || PassedTime[1]>0 || PassedTime[2]>2){
+					expired = true;
+					expiredNum = index;
+				}
+			}
+			if (expired) {
+				RegCurrList[RegListCount] = "";
+				RegSensLastSeen[RegListCount] = "";
+				RegListCount--;
+				for(int index = expiredNum; index < RegCurrList.length-1; ++index) {
+					RegCurrList[index] = RegCurrList[index+1];
+					RegSensLastSeen[index] = RegSensLastSeen[index+1];
+				}
+			}
+		}
+    }
 
 	@Override
 	public void OutPutEPC(Tag_Model model) {
 		UniqueEPCTag = true;
+		UniqueRegTag = true;
 		
 		CurTime = Calendar.getInstance();
 		CurTime.setTime(new Date());
-		String timeStr = String.format("%d:%02d:%02d", CurTime.get(Calendar.HOUR), CurTime.get(Calendar.MINUTE),CurTime.get(Calendar.SECOND));
+		CurrTime[0] = CurTime.get(Calendar.HOUR_OF_DAY);
+		CurrTime[1] = CurTime.get(Calendar.MINUTE);
+		CurrTime[2] = CurTime.get(Calendar.SECOND);
+		String timeStr = String.format("%d:%02d:%02d",CurrTime[0],CurrTime[1],CurrTime[2]);
 		
 		for(int index = 0; index < UniqueEPC.length; ++index)
 	            if (model._EPC.equals(UniqueEPC[index])) {
-	            	RegSensLastSeen[index] = timeStr;
+	            	TagLastSeen[index] = timeStr;
 	                UniqueEPCTag = false;
 	            }
 		if (UniqueEPCTag){
-			 UniqueEPC[UniqueEPCount] = model._EPC;
+			UniqueEPC[UniqueEPCount] = model._EPC;
 			TagLastSeen[UniqueEPCount] = timeStr;
-			 UniqueEPCount++;
+			UniqueEPCount++;
 	    }
 		
-		if (RegListCount != 0) {
+		if (registration) {
 			for(int index = 0; index < RegSensList.length; ++index)
-				if (model._EPC.equals(RegSensList[index])) {
-					TagLastSeen[index] = timeStr;
+				if (model._EPC.equals(RegCurrList[index])) {
+					RegSensLastSeen[index] = timeStr;
 					UniqueRegTag = false;
 				}
-			if (UniqueEPCTag){
-				UniqueEPC[UniqueEPCount] = model._EPC;
-				TagLastSeen[UniqueEPCount] = timeStr;
-				UniqueEPCount++;
+			if (UniqueRegTag){
+				RegCurrList[RegListCount] = model._EPC;
+				RegSensLastSeen[RegListCount] = timeStr;
+				RegListCount++;
 			}
 		}
 	}

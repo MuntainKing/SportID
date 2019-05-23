@@ -53,13 +53,9 @@
 </head>
 <body>
 	<div id="MainContainer">
-		<form>
-			Command: <input type="text" id="fullname"> <input
-				type="button" value="Send" id="bttHello"> <br> <span
-				id="result1"></span>
-		</form>
 		<div class="nav-container">
 			<div class="centered">
+			<p id="pageTitle">Проверка меток</p>
 				<a class="nav-element" href="/SportID/"> Назад </a>
 				<a class="nav-element" href="/SportID/register/"> Регистрация </a>
 			</div>

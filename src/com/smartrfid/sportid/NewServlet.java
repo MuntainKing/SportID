@@ -20,6 +20,7 @@ public class NewServlet extends HttpServlet {
 
 	ReaderController rc = new ReaderController();
 	FileController fc = new FileController();
+	CompetitionController cc = new CompetitionController();
 	Calendar current;
 
 	private static final long serialVersionUID = 1L;
@@ -48,7 +49,7 @@ public class NewServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		current = Calendar.getInstance();
 		current.setTime(new Date());
-		String timeStr = String.format("%d:%02d:%02d", current.get(Calendar.HOUR), current.get(Calendar.MINUTE),current.get(Calendar.SECOND));
+		String timeStr = String.format("%d:%02d:%02d", current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE),current.get(Calendar.SECOND));
 
 		response.setContentType("text/plain");
 		response.setContentType("text/html; charset=utf-8");
@@ -57,7 +58,9 @@ public class NewServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		if (action.equals("savingAct")) {
-			try {
+			rc.saveSensList();
+			System.out.println("Sens list saved");
+			/*try {
 				fc.newFile();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -66,7 +69,7 @@ public class NewServlet extends HttpServlet {
 			String saving = request.getParameter("saving");
 			System.out.println("Saving: "+ saving + " " + timeStr);
 
-			if (saving.equals("true")) {System.out.println("Saving complete");}
+			if (saving.equals("true")) {System.out.println("Saving complete");}*/
 		}
 
 		if (action.equals("startRead")) {
@@ -125,6 +128,44 @@ public class NewServlet extends HttpServlet {
 						+ "<td><p>Last seen</p></td>"
 						+ "</tr></table> ");
 			}
+		}
+		
+		if (action.equals("SensListCheck")) {
+			rc.checkExpired();
+			System.out.println("Sens List check " + timeStr);
+			int i = rc.getRegListCount();
+			if (i != 0) {
+				out.print("<table>	<tr>\r\n" + 
+						"		<td>\r\n" + 
+						"			<p>№</p>\r\n" + 
+						"		</td>\r\n" + 
+						"		<td>\r\n" + 
+						"			<p>EPC</p>\r\n" + 
+						"		</td>\r\n" + 
+						"		<td>\r\n" + 
+						"			<p>Last seen</p>\r\n" + 
+						"		</td>\r\n" + 
+						"	</tr>");
+				for (int index = 0; index < i; index++) {
+					int hi = index + 1;
+					out.print("		<td>\r\n" + 
+							"			<p>"+ hi +"</p>\r\n" + 
+							"		</td>\r\n" + 
+							"		<td>\r\n" + 
+							"			<p>"+ rc.getRegEPC(index) + "</p>\r\n" + 
+							"		</td>\r\n" + 
+							"		<td>\r\n" + 
+							"			<p>" + rc.getRegTimestamp(index)+"</p>\r\n" + 
+							"		</td>\r\n" + 
+							"	</tr>");
+				}
+				out.print("</table>");
+			} else out.print("<table><tr>"
+					+ "<td><p>№</p></td>"
+					+ "<td><p>EPC</p></td>"
+					+ "<td><p>Last seen</p></td>"
+					+ "</tr></table> ");
+
 		}
 	}
 }

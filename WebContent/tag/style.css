@@ -5,12 +5,24 @@
 .centered{
 	margin-left: auto;
     margin-right: auto;
-    padding-top : 25px;
-    width: 40%;
+    padding : 15px;
+    width: 45%;
+    overflow: auto;
+}
+
+body{
+	margin:auto;
+}
+
+#pageTitle{
+	color: white;
+	text-align: center;
+	font-size:45px;
+	margin: 5px
 }
 
 .nav-container{
-	height : 100px;
+	height : 7%;
 	background-color : black;
 	width: 100%;
 }
@@ -20,7 +32,7 @@
     background-color: #9d0000;
     border: none;
     color: #FFFFFF;
-    padding: 15px 32px;
+    padding: 15px;
     text-align: center;
     -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
@@ -28,7 +40,8 @@
 	font-size: 16px;
 	cursor: pointer;
 	display: inline-block;
-	width:25%;
+	width: 50%;
+	border: 1px solid #c6cfd6;
 }
 
 .nav-element:hover, .nav-element:active {

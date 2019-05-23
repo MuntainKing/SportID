@@ -8,12 +8,6 @@
 </head>
 <body>
 <div id="topcontainer">
-<form>
-	Command: <input type="text" id="fullname">
-	<input type="button" value="Send" id="bttHello">
-	<br>
-	<span id="result1"></span>
-</form>
 
 <a class = "logo-container" href="/SportID/">
 <img id ="LogoImg" src="/SportID/images/logo.png" alt="Return" border="0">
