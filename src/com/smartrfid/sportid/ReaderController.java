@@ -12,10 +12,11 @@ public class ReaderController implements IAsynchronousMessage {
 	String[] TagLastSeen = new String[40];
 	String[] RegSensList = new String[40];
 	String[] RegCurrList = new String[40];
-	String[] RegSensLastSeen = new String[40];
+	String[] RegCurrLastSeen = new String[40];
 	
     int UniqueEPCount = 0;
     int RegListCount = 0;
+    int SensListCount = 0;
     boolean UniqueEPCTag = false;
     boolean UniqueRegTag = false;
     boolean registration = false;
@@ -31,17 +32,22 @@ public class ReaderController implements IAsynchronousMessage {
     
     public void saveSensList() {
     	RegSensList = UniqueEPC;
+    	for(int index = 0; index < RegSensList.length; ++index) 
+    		System.out.println("RegSensList"+ RegSensList[index]);
+    	SensListCount = UniqueEPCount;
+    	System.out.println("SensListCount"+ SensListCount);
     	registration = true;
     }
     
+    //Отдать епц метки из листа с ласт син 2 сек метками
     public String getRegEPC(int num) {
     	if (RegListCount < num) {return null;}
-    	else return RegSensList[num];
+    	else return RegCurrList[num];
     }
     
     public String getRegTimestamp(int num) {
     	if (RegListCount < num) {return null;}
-    	else return RegSensLastSeen[num];
+    	else return RegCurrLastSeen[num];
     }
     
     public int getRegListCount() {
@@ -140,7 +146,7 @@ public class ReaderController implements IAsynchronousMessage {
 			CheckTime[2] = CurTime.get(Calendar.SECOND);
 			
 			for(int index = 0; index < RegListCount; ++index) {
-				String[] pairs = RegSensLastSeen[index].split(":");			
+				String[] pairs = RegCurrLastSeen[index].split(":");			
 				for (int i = 0; i < pairs.length; i++) {
 					ParsedTime[0] = Integer.parseInt(pairs[0]);
 					ParsedTime[1] = Integer.parseInt(pairs[1]);
@@ -164,11 +170,11 @@ public class ReaderController implements IAsynchronousMessage {
 			}
 			if (expired) {
 				RegCurrList[RegListCount] = "";
-				RegSensLastSeen[RegListCount] = "";
+				RegCurrLastSeen[RegListCount] = "";
 				RegListCount--;
 				for(int index = expiredNum; index < RegCurrList.length-1; ++index) {
 					RegCurrList[index] = RegCurrList[index+1];
-					RegSensLastSeen[index] = RegSensLastSeen[index+1];
+					RegCurrLastSeen[index] = RegCurrLastSeen[index+1];
 				}
 			}
 		}
@@ -178,6 +184,7 @@ public class ReaderController implements IAsynchronousMessage {
 	public void OutPutEPC(Tag_Model model) {
 		UniqueEPCTag = true;
 		UniqueRegTag = true;
+		boolean InSensList = false;
 		
 		CurTime = Calendar.getInstance();
 		CurTime.setTime(new Date());
@@ -198,14 +205,19 @@ public class ReaderController implements IAsynchronousMessage {
 	    }
 		
 		if (registration) {
-			for(int index = 0; index < RegSensList.length; ++index)
+			for(int index2 = 0; index2 < SensListCount; ++index2)
+				if (model._EPC.equals(RegSensList[index2])) {
+					InSensList = true;
+				}
+			if (InSensList)
+			for(int index = 0; index < RegListCount; ++index)	
 				if (model._EPC.equals(RegCurrList[index])) {
-					RegSensLastSeen[index] = timeStr;
+					RegCurrLastSeen[index] = timeStr;
 					UniqueRegTag = false;
 				}
-			if (UniqueRegTag){
+			if (UniqueRegTag & InSensList){
 				RegCurrList[RegListCount] = model._EPC;
-				RegSensLastSeen[RegListCount] = timeStr;
+				RegCurrLastSeen[RegListCount] = timeStr;
 				RegListCount++;
 			}
 		}

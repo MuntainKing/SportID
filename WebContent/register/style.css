@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+#registerTable{
+	overflow:auto;
+}
+
 input[type=text], select {
   width: 100%;
   padding: 12px 20px;
@@ -10,6 +14,17 @@ input[type=text], select {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+#form-msg{
+	text-align: center;
+}
+.form-error{
+	color:red;
+}
+
+.form-success{
+	color:green;
 }
 
 input[type=submit] {
@@ -70,7 +85,7 @@ table{
 	border-collapse:collapse;
 }
 
-tr:nth-child(2){
+#senslistcont tr:nth-child(2){
 	background-color: #e4f223;	
 }
 
@@ -107,7 +122,6 @@ tr:nth-child(2){
   float: left;
   width: 33.33%;
   padding: 10px;
-  /*height: 300px;*/ /* Should be removed. Only for demonstration */
 }
 
 /* Clear floats after the columns */
@@ -119,7 +133,8 @@ tr:nth-child(2){
 
 .competitors-table-container{
 	width:100%;
-	display: inline-block
+	display: inline-block;
+	padding: 10px;
 }
 
 button {

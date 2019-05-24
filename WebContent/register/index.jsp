@@ -8,9 +8,12 @@
 <link rel='stylesheet' id='theme-style-css'
 	href='/SportID/register/style.css' type='text/css' media='all' />
 <script type="text/javascript" src="/SportID/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/SportID/js/x005.js"></script>
+<script type="text/javascript" src="/SportID/js/x006.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		setTimeout(worker, 3000);
+		setTimeout(retriever, 1000);
 	});
 
 	function worker() {
@@ -25,7 +28,7 @@
 			},
 			complete : function() {
 				// Schedule the next request when the current one's complete
-				setTimeout(worker, 500);
+				setTimeout(worker, 1000);
 			}
 		});
 	}
@@ -43,17 +46,17 @@
 		</div>
 		<div class="container">
 			<div class="column">
-				<form action="/action_page.php">
-					<label for="fname">Имя</label> <input type="text" id="fname"
-						name="firstname" placeholder="Имя участника"> <label
-						for="surname">Фаимлия</label> <input type="text" id="surname"
-						name="lastname" placeholder="Фамилия участника"> <label
-						for="Pname">Отчество</label> <input type="text" id="Pname"
-						name="patronymic" placeholder="Отчество участника"> <label
-						for="number">Номер</label> <input type="text" id="number"
-						name="number" placeholder="Номер участника"> <label
-						for="byear">Год рождения</label> <select id="byear"
-						name="birth-year">
+				<form id = "regForm" action="/action_page.php">
+					<label for="fname">Имя</label>
+					<input type="text" id="fname"name="firstname" placeholder="Имя участника">
+					<label for="surname">Фаимлия</label>
+					<input type="text" id="surname"name="lastname" placeholder="Фамилия участника">
+					<label for="Pname">Отчество</label>
+					<input type="text" id="Pname"name="patronymic" placeholder="Отчество участника">
+					<label for="number">Номер</label>
+					<input type="text" id="number" name="number" placeholder="Номер участника">
+					<label for="byear">Год рождения</label>
+					<select id="byear" name="birth-year">
 						<option value="2018">2018</option>
 						<option value="2017">2017</option>
 						<option value="2016">2016</option>
@@ -168,12 +171,14 @@
 						<option value="1907">1907</option>
 						<option value="1906">1906</option>
 						<option value="1905">1905</option>
-					</select> <label for="gender">Пол</label> <input type="radio" name="gender"
-						value="male">Мужчина <input type="radio" name="gender"
-						value="female">Женщина <input type="radio" name="gender"
-						value="other">Другой <input type="submit"
-						value="Зарегистрировать">
+					</select>
+					<label for="gender">Пол</label> 
+					<input type="radio" name="gender"value="male" checked>Мужчина
+					<input type="radio" name="gender"value="female">Женщина
+					<input type="radio" name="gender"value="other">Другой
+					<input type="submit"value="Зарегистрировать">
 				</form>
+				<div id ="form-msg"></div>
 			</div>
 			<!--column1 -->
 
@@ -198,7 +203,7 @@
 			<!--column2 -->
 
 			<div class="column"></div>
-
+				<div id="htmlLog"></div>
 			<!--column 3 -->
 			<div class="competitors-table-container">
 				<label for="registerTable">Участники</label>
@@ -206,6 +211,9 @@
 				<div id="registerTable">
 					<table>
 						<tr>
+							<td>
+								<p>Порядковый</p>
+							</td>
 							<td>
 								<p>Имя</p>
 							</td>

@@ -5,6 +5,7 @@ public class CompetitionController {
 	int competCount = 0;
 	
 	public void addCompetitor(String Name, String Surname, String Patron, int number, int bYear, String Gender, String EPC) {
+		competitors[competCount] = new Competitor();
 		competitors[competCount].Name = Name;
 		competitors[competCount].Surname = Surname;
 		competitors[competCount].Patron = Patron;
@@ -14,8 +15,12 @@ public class CompetitionController {
 		competitors[competCount].EPC = EPC;
 		competCount++;
 	}
+	
 	public Competitor getCompetitor(int num) {
 		if (num>competCount) {return null;}
-		else return null;
+		else return competitors[num];
+	}
+	public int getCompetitorsCount() {
+		return competCount;
 	}
 }

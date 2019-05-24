@@ -19,9 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 public class NewServlet extends HttpServlet {
 
 	ReaderController rc = new ReaderController();
-	FileController fc = new FileController();
 	CompetitionController cc = new CompetitionController();
 	Calendar current;
+
 
 	private static final long serialVersionUID = 1L;
 
@@ -60,16 +60,68 @@ public class NewServlet extends HttpServlet {
 		if (action.equals("savingAct")) {
 			rc.saveSensList();
 			System.out.println("Sens list saved");
-			/*try {
-				fc.newFile();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			String saving = request.getParameter("saving");
-			System.out.println("Saving: "+ saving + " " + timeStr);
+		}
+		
+		if (action.equals("retrieveCompetitors")) {
+			//System.out.println("Retrieveing competitors");
 
-			if (saving.equals("true")) {System.out.println("Saving complete");}*/
+			out.write("<table><tr>" +
+					"<td><p>Порядковый</p></td>" + 
+					"<td><p>Имя</p></td>" + 
+					"<td><p>Фаимлия</p></td>\r\n" + 
+					"<td><p>Отчество</p></td>\r\n" + 
+					"<td><p>Номер</p></td>\r\n" + 
+					"<td><p>Год рождения</p></td>\r\n" + 
+					"<td><p>Пол</p></td>\r\n" + 
+					"<td><p>Метка</p></td>\r\n" + 
+					"</tr>\r\n");
+			int ci = cc.getCompetitorsCount();
+			if (ci != 0) {
+				for (int index = 0; index < ci; index++) {
+					int hi = index + 1;
+					out.print("<tr><td><p>"+ hi +"</p></td>\r\n" + 
+							"<td><p>" + cc.getCompetitor(index).Name + "</p></td>\r\n" + 
+							"<td><p>" + cc.getCompetitor(index).Surname +"</p></td>\r\n" + 
+							"<td><p>" + cc.getCompetitor(index).Patron +"</p></td>\r\n" + 
+							"<td><p>" + cc.getCompetitor(index).Number +"</p></td>\r\n" + 
+							"<td><p>" + cc.getCompetitor(index).BYear +"</p></td>\r\n" + 
+							"<td><p>" + cc.getCompetitor(index).Gender +"</p></td>\r\n" + 
+							"<td><p>" + cc.getCompetitor(index).EPC +"</p></td>\r\n" + 
+							"</tr>");
+				}
+			}
+			out.print("</table>");
+
+		}
+		
+		
+		if (action.equals("saveCompetitor")) {
+			System.out.println("Saving competitor");
+			String name = request.getParameter("name");
+			String surname = request.getParameter("surname");
+			String Pname = request.getParameter("Pname");
+			String number = request.getParameter("number");
+			String byear = request.getParameter("byear");
+			String radioValue = request.getParameter("radioValue");
+			String targetEPC = request.getParameter("targetEPC");
+			if (name.equals("") || surname.equals("") || Pname.equals("")|| number.equals(""))
+				out.print("<span class=\"form-error\"> Заполните все поля </span>");
+			else {
+				String regex = "[0-9]+";
+				if (!number.matches(regex)) out.print("<span class=\"form-error\"> Номер может содержать только цифры </span>");
+				else {
+					int ci2 = cc.getCompetitorsCount();
+					boolean duplicate = false;
+					for (int index = 0; index < ci2; index++) {
+						if (cc.getCompetitor(index).EPC.contentEquals(targetEPC)) duplicate = true; // toDO: handle compet correction
+					}
+					if (duplicate == false) { 
+						cc.addCompetitor(name, surname, Pname, Integer.parseInt(number), Integer.parseInt(byear), radioValue, targetEPC);
+						out.print("<span class=\"form-success\"> Участник зарегистрирован </span>");
+					} else out.print("<span class=\"form-error\"> Метка уже зарегистрирована </span>");
+
+				}
+			}
 		}
 
 		if (action.equals("startRead")) {
@@ -94,45 +146,34 @@ public class NewServlet extends HttpServlet {
 			System.out.println("Command: "+ fullname + " " + timeStr);
 
 			if (fullname.equals("check")) {
-
+				out.print("<table><tr>"
+						+ "<td><p>№</p></td>"
+						+ "<td><p>EPC</p></td>"
+						+ "<td><p>Last seen</p></td>"
+						+ "</tr>");
 				int i = rc.getUniqueTagCount();
 				if (i != 0) {
-					out.print("<table>	<tr>\r\n" + 
-							"		<td>\r\n" + 
-							"			<p>№</p>\r\n" + 
-							"		</td>\r\n" + 
-							"		<td>\r\n" + 
-							"			<p>EPC</p>\r\n" + 
-							"		</td>\r\n" + 
-							"		<td>\r\n" + 
-							"			<p>Last seen</p>\r\n" + 
-							"		</td>\r\n" + 
-							"	</tr>");
 					for (int index = 0; index < i; index++) {
 						int hi = index + 1;
 						out.print("		<td>\r\n" + 
 								"			<p>"+ hi +"</p>\r\n" + 
 								"		</td>\r\n" + 
 								"		<td>\r\n" + 
-								"			<p>"+ rc.getEPC(index) + "</p>\r\n" + 
+								"			<p>" + rc.getEPC(index) + "</p>\r\n" + 
 								"		</td>\r\n" + 
 								"		<td>\r\n" + 
 								"			<p>" + rc.getLastTimestamp(index)+"</p>\r\n" + 
 								"		</td>\r\n" + 
 								"	</tr>");
 					}
-					out.print("</table>");
-				} else out.print("<table><tr>"
-						+ "<td><p>№</p></td>"
-						+ "<td><p>EPC</p></td>"
-						+ "<td><p>Last seen</p></td>"
-						+ "</tr></table> ");
+				}
+				out.print("</table>");
 			}
 		}
 		
 		if (action.equals("SensListCheck")) {
 			rc.checkExpired();
-			System.out.println("Sens List check " + timeStr);
+			//System.out.println("Sens List check " + timeStr);
 			int i = rc.getRegListCount();
 			if (i != 0) {
 				out.print("<table>	<tr>\r\n" + 
@@ -152,7 +193,9 @@ public class NewServlet extends HttpServlet {
 							"			<p>"+ hi +"</p>\r\n" + 
 							"		</td>\r\n" + 
 							"		<td>\r\n" + 
-							"			<p>"+ rc.getRegEPC(index) + "</p>\r\n" + 
+							"			<p ");
+					if (index==0) out.print("id = \"targetEPC\"");
+					out.print(">"+ rc.getRegEPC(index) + "</p>\r\n" + 
 							"		</td>\r\n" + 
 							"		<td>\r\n" + 
 							"			<p>" + rc.getRegTimestamp(index)+"</p>\r\n" + 

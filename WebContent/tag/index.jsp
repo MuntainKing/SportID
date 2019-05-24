@@ -49,6 +49,13 @@
 			}
 		});
 	}
+	
+	$(window).resize(function() {
+		if(this.resizeTO) clearTimeout(this.resizeTO);
+		    this.resizeTO = setTimeout(function() {
+		      $(this).trigger('windowResize');
+		    }, 500); 
+		});
 </script>
 </head>
 <body>
@@ -74,28 +81,29 @@
 			</div>
 			<!--column1 -->
 
-			<div class="column">
-				<div id="ajaxresponse">
-					<table>
-						<tr>
-							<td>
-								<p>№</p>
-							</td>
-							<td>
-								<p>EPC</p>
-							</td>
-							<td>
-								<p>Last seen</p>
-							</td>
-						</tr>
-					</table>
+			<div class="column" style="width: 47%;">
+				<div id="tableContainer" >
+					<div id="ajaxresponse">
+						<table>
+							<tr>
+								<td>
+									<p>№</p>
+								</td>
+								<td>
+									<p>EPC</p>
+								</td>
+								<td>
+									<p>Last seen</p>
+								</td>
+							</tr>
+						</table>
+					</div>
 				</div>
 
-
-				<div id="saveStatus"></div>
+			<div id="saveStatus"></div>
 			</div>
 
-			<div class="column">
+			<div class="column" style="width: 19%;">
 
 				<div id="htmlLog"></div>
 
