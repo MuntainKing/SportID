@@ -4,7 +4,7 @@
 <html>
 <head>
 
-<title>Demo Ajax</title>
+<title>Sport ID Tags check</title>
 <link rel='stylesheet' id='theme-style-css'
 	href='/SportID/tag/style.css' type='text/css' media='all' />
 <script type="text/javascript" src="/SportID/js/jquery-3.4.1.min.js"></script>

@@ -11,11 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.*;
 
-/**
- * Servlet implementation class NewServlet
- */
+
 @WebServlet("/NewServlet")
 public class NewServlet extends HttpServlet {
 
@@ -25,26 +22,17 @@ public class NewServlet extends HttpServlet {
 
 
 	private static final long serialVersionUID = 1L;
+	
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
 	public NewServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		request.setCharacterEncoding("UTF-8");
@@ -61,6 +49,7 @@ public class NewServlet extends HttpServlet {
 		if (action.equals("savingAct")) {
 			rc.saveSensList();
 			System.out.println("Sens list saved");
+			out.close();
 		}
 		
 		if (action.equals("retrieveCompetitors")) {
@@ -96,12 +85,13 @@ public class NewServlet extends HttpServlet {
 				}
 			}
 			out.print("</table>\"}");
-
+			out.close();
 		}
 		
 		if (action.equals("saveList")) {
 			String listName = request.getParameter("listname");
-			cc.saveCompetitors(listName);
+			out.print(cc.saveCompetitors(listName));
+			out.close();
 		}
 		
 		if (action.equals("saveCompetitor")) {
@@ -131,23 +121,27 @@ public class NewServlet extends HttpServlet {
 
 				}
 			}
+			out.close();
 		}
 
 		if (action.equals("startRead")) {
 			rc.COMConnect();
 			System.out.println("Reader connected ");
 			out.print("Reader connected<br>");
+			out.close();
 		}
 		
 		if (action.equals("stopRead")) {
 			rc.TCPDisconnect();
 			System.out.println("Reader disconnected ");
 			out.print("Reader disconnected<br>");
+			out.close();
 		}
 		
 		if (action.equals("resetTags")) {
 			rc.resetEPC();
 			out.print("Tags reset <br>");
+			out.close();
 		}
 	
 		if (action.equals("epcCheckAct")) {
@@ -178,6 +172,7 @@ public class NewServlet extends HttpServlet {
 				}
 				out.print("</table>");
 			}
+			out.close();
 		}
 		
 		if (action.equals("SensListCheck")) {
@@ -217,7 +212,7 @@ public class NewServlet extends HttpServlet {
 					+ "<td><p>EPC</p></td>"
 					+ "<td><p>Last seen</p></td>"
 					+ "</tr></table> ");
-
+			out.close();
 		}
 	}
 }

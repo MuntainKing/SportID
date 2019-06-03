@@ -36,10 +36,7 @@ public class ReaderController implements IAsynchronousMessage {
     
     public void saveSensList() {
     	RegSensList = UniqueEPC;
-    	for(int index = 0; index < RegSensList.length; ++index) 
-    		System.out.println("RegSensList"+ RegSensList[index]);
     	SensListCount = UniqueEPCount;
-    	System.out.println("SensListCount"+ SensListCount);
     	registration = true;
     }
     

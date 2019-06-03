@@ -24,13 +24,16 @@ public class CompetitionController {
 	public int getCompetitorsCount() {
 		return competCount;
 	}
+
 	
-	public void saveCompetitors(String name) {
+	public String saveCompetitors(String name) {
 		if (competCount > 0)
 		try {
 			fc.saveList(name, competitors, competCount);
+			return "Saved successfully";
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
-		}
+			return e.getMessage();
+		} else return "Nothing to save";
 	}
 }

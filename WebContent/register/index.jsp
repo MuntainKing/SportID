@@ -4,7 +4,7 @@
 <html>
 <head>
 
-<title>Demo Ajax</title>
+<title>Sport ID Registration</title>
 <link rel='stylesheet' id='theme-style-css'
 	href='/SportID/register/style.css' type='text/css' media='all' />
 <script type="text/javascript" src="/SportID/js/jquery-3.4.1.min.js"></script>
@@ -262,6 +262,8 @@
 					</table>
 				</div>
 			</div>
+		</div>
+		<div class="footer">
 		</div>
 	</div>
 </body>

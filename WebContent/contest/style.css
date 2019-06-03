@@ -2,6 +2,51 @@
   box-sizing: border-box;
 }
 
+#registerTable{
+	overflow:auto;
+	display:inline-block;
+}
+
+.footer{
+height : 300px;	
+}
+
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#form-msg{
+	text-align: center;
+}
+.form-error{
+	color:red;
+}
+
+.form-success{
+	color:green;
+}
+
+input[type=submit] {
+  width: 100%;
+  background-color: #9d0000;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #dd0000;
+}
+
 .centered{
 	margin-left: auto;
     margin-right: auto;
@@ -14,45 +59,16 @@ body{
 	margin:auto;
 }
 
-#tableContainer{
-	height:400px;
-	overflow:auto;
-	border: 1px solid #c6cfd6;
-	display:inline-block;
-}
-
 #pageTitle{
 	color: white;
 	text-align: center;
 	font-size:45px;
 	margin: 5px
 }
-
-.nav-container{
-	height : 7%;
-	background-color : black;
-	width: 100%;
-}
-	
-.nav-element:link, .nav-element:visited {
-	float: left;
-    background-color: #9d0000;
-    border: none;
-    color: #FFFFFF;
-    padding: 15px;
-    text-align: center;
-    -webkit-transition-duration: 0.4s;
-    transition-duration: 0.4s;
-    text-decoration: none;
-	font-size: 16px;
-	cursor: pointer;
-	display: inline-block;
-	width: 50%;
-	border: 1px solid #c6cfd6;
-}
-
-.nav-element:hover, .nav-element:active {
-   background-color: #dd0000;
+#senslistcont{
+	height : 250px;
+	overflow : auto;
+	display:inline-block;
 }
 
 tr:first-child{
@@ -73,12 +89,66 @@ table{
 	border-collapse:collapse;
 }
 
+#senslistcont tr:nth-child(2){
+	background-color: #e4f223;	
+}
+
+.indiContainer{
+	width:80%;
+	display:inline-block;
+}
+
+.ReadyContainer{
+	float:left;
+}
+
+.ReadContainer{
+	float:right;
+}
+
+#RI{
+	width:40px;
+	height:40px;
+}
+
+#RR{
+	width:40px;
+	height:40px;
+}
+
+.nav-container{
+	height : 7%;
+	background-color : black;
+	width: 100%;
+}
+	
+.nav-element:link, .nav-element:visited {
+	float: left;
+    background-color: #9d0000;
+    border: none;
+    color: #FFFFFF;
+    padding: 15px 32px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    text-decoration: none;
+	font-size: 16px;
+	cursor: pointer;
+	display: inline-block;
+	width:25%;
+	width: 33.3%;
+	border: 1px solid #c6cfd6;
+}
+
+.nav-element:hover, .nav-element:active {
+   background-color: #dd0000;
+}
+
 /* Create two equal columns that floats next to each other */
 .column {
   float: left;
   width: 33.33%;
   padding: 10px;
-  height: 300px; /* Should be removed. Only for demonstration */
 }
 
 /* Clear floats after the columns */
@@ -86,6 +156,13 @@ table{
   content: "";
   display: table;
   clear: both;
+}
+
+.competitors-table-container{
+	width:100%;
+	display: inline-block;
+	padding: 10px;
+	text-align:center;
 }
 
 button {
@@ -103,7 +180,7 @@ button:hover{
 	background-color: #dd0000;
 }
 
-@media screen and (max-width: 1340px) {
+@media screen and (max-width: 600px) {
   .column {
     width: 100%;
   }

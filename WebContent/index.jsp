@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Demo Ajax</title>
+<title>Sport ID Main page</title>
 <link rel='stylesheet' id='theme-style-css'  href='/SportID/style.css' type='text/css' media='all' />
 </head>
 <body>
