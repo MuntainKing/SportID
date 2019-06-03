@@ -30,6 +30,10 @@ public class ReaderController implements IAsynchronousMessage {
     static String tcpParam = "192.168.1.116:9090";
     static String commParam = "COM4:115200";
     
+    public boolean isConnected() {
+    	return conn;
+    }
+    
     public void saveSensList() {
     	RegSensList = UniqueEPC;
     	for(int index = 0; index < RegSensList.length; ++index) 

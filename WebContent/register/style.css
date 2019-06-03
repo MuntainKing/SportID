@@ -4,6 +4,7 @@
 
 #registerTable{
 	overflow:auto;
+	display:inline-block;
 }
 
 input[type=text], select {
@@ -60,11 +61,10 @@ body{
 	font-size:45px;
 	margin: 5px
 }
-.senslistcont{
+#senslistcont{
 	height : 250px;
-	background-color : black;
-	width: 100%;
-	overflow : scroll;
+	overflow : auto;
+	display:inline-block;
 }
 
 tr:first-child{
@@ -87,6 +87,29 @@ table{
 
 #senslistcont tr:nth-child(2){
 	background-color: #e4f223;	
+}
+
+.indiContainer{
+	width:80%;
+	display:inline-block;
+}
+
+.ReadyContainer{
+	float:left;
+}
+
+.ReadContainer{
+	float:right;
+}
+
+#RI{
+	width:40px;
+	height:40px;
+}
+
+#RR{
+	width:40px;
+	height:40px;
 }
 
 .nav-container{
@@ -135,6 +158,7 @@ table{
 	width:100%;
 	display: inline-block;
 	padding: 10px;
+	text-align:center;
 }
 
 button {

@@ -1,0 +1,110 @@
+* {
+  box-sizing: border-box;
+}
+
+.centered{
+	margin-left: auto;
+    margin-right: auto;
+    padding : 15px;
+    width: 45%;
+    overflow: auto;
+}
+
+body{
+	margin:auto;
+}
+
+#tableContainer{
+	height:400px;
+	overflow:auto;
+	border: 1px solid #c6cfd6;
+	display:inline-block;
+}
+
+#pageTitle{
+	color: white;
+	text-align: center;
+	font-size:45px;
+	margin: 5px
+}
+
+.nav-container{
+	height : 7%;
+	background-color : black;
+	width: 100%;
+}
+	
+.nav-element:link, .nav-element:visited {
+	float: left;
+    background-color: #9d0000;
+    border: none;
+    color: #FFFFFF;
+    padding: 15px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    text-decoration: none;
+	font-size: 16px;
+	cursor: pointer;
+	display: inline-block;
+	width: 50%;
+	border: 1px solid #c6cfd6;
+}
+
+.nav-element:hover, .nav-element:active {
+   background-color: #dd0000;
+}
+
+tr:first-child{
+	background-color: #f3f3f3;	
+}
+
+table td{
+	padding: 0px 5px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #c6cfd6;
+    font-size: 14px;
+	min-width: 10em;
+	
+}
+
+table{
+	border-collapse:collapse;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+button {
+  background-color: #9d0000; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin : 2px;
+}
+button:hover{
+	background-color: #dd0000;
+}
+
+@media screen and (max-width: 1340px) {
+  .column {
+    width: 100%;
+  }
+}

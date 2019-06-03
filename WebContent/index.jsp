@@ -23,7 +23,7 @@
 Регистрация
 </a>
 
-<a class = "nav-element" href="/SportID/">
+<a class = "nav-element" href="/SportID/contest/">
 Забег
 </a>
 

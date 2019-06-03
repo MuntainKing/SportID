@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.*;
 
 /**
  * Servlet implementation class NewServlet
@@ -64,36 +65,44 @@ public class NewServlet extends HttpServlet {
 		
 		if (action.equals("retrieveCompetitors")) {
 			//System.out.println("Retrieveing competitors");
-
-			out.write("<table><tr>" +
+			if (rc.isConnected()) {
+			out.write("{\"sus\":\"/SportID/images/onlineIndicator.png\",");
+			System.out.println("online");}
+			else out.write("{\"sus\":\"/SportID/images/offlineINdicator.png\",");
+			
+			out.write("\"competitors\":\"<table><tr>" +
 					"<td><p>Порядковый</p></td>" + 
 					"<td><p>Имя</p></td>" + 
-					"<td><p>Фаимлия</p></td>\r\n" + 
-					"<td><p>Отчество</p></td>\r\n" + 
-					"<td><p>Номер</p></td>\r\n" + 
-					"<td><p>Год рождения</p></td>\r\n" + 
-					"<td><p>Пол</p></td>\r\n" + 
-					"<td><p>Метка</p></td>\r\n" + 
-					"</tr>\r\n");
+					"<td><p>Фаимлия</p></td>" + 
+					"<td><p>Отчество</p></td>" + 
+					"<td><p>Номер</p></td>" + 
+					"<td><p>Год рождения</p></td>" + 
+					"<td><p>Пол</p></td>" + 
+					"<td><p>Метка</p></td>" + 
+					"</tr>");
 			int ci = cc.getCompetitorsCount();
 			if (ci != 0) {
 				for (int index = 0; index < ci; index++) {
 					int hi = index + 1;
-					out.print("<tr><td><p>"+ hi +"</p></td>\r\n" + 
-							"<td><p>" + cc.getCompetitor(index).Name + "</p></td>\r\n" + 
-							"<td><p>" + cc.getCompetitor(index).Surname +"</p></td>\r\n" + 
-							"<td><p>" + cc.getCompetitor(index).Patron +"</p></td>\r\n" + 
-							"<td><p>" + cc.getCompetitor(index).Number +"</p></td>\r\n" + 
-							"<td><p>" + cc.getCompetitor(index).BYear +"</p></td>\r\n" + 
-							"<td><p>" + cc.getCompetitor(index).Gender +"</p></td>\r\n" + 
-							"<td><p>" + cc.getCompetitor(index).EPC +"</p></td>\r\n" + 
+					out.print("<tr><td><p>"+ hi +"</p></td>" + 
+							"<td><p>" + cc.getCompetitor(index).Name + "</p></td>" + 
+							"<td><p>" + cc.getCompetitor(index).Surname +"</p></td>" + 
+							"<td><p>" + cc.getCompetitor(index).Patron +"</p></td>" + 
+							"<td><p>" + cc.getCompetitor(index).Number +"</p></td>" + 
+							"<td><p>" + cc.getCompetitor(index).BYear +"</p></td>" + 
+							"<td><p>" + cc.getCompetitor(index).Gender +"</p></td>" + 
+							"<td><p>" + cc.getCompetitor(index).EPC +"</p></td>" + 
 							"</tr>");
 				}
 			}
-			out.print("</table>");
+			out.print("</table>\"}");
 
 		}
 		
+		if (action.equals("saveList")) {
+			String listName = request.getParameter("listname");
+			cc.saveCompetitors(listName);
+		}
 		
 		if (action.equals("saveCompetitor")) {
 			System.out.println("Saving competitor");

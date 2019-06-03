@@ -8,8 +8,11 @@
 <link rel='stylesheet' id='theme-style-css'
 	href='/SportID/register/style.css' type='text/css' media='all' />
 <script type="text/javascript" src="/SportID/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/SportID/js/x002.js"></script>
+<script type="text/javascript" src="/SportID/js/x003.js"></script>
 <script type="text/javascript" src="/SportID/js/x005.js"></script>
 <script type="text/javascript" src="/SportID/js/x006.js"></script>
+<script type="text/javascript" src="/SportID/js/x007.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		setTimeout(worker, 3000);
@@ -38,25 +41,49 @@
 	<div id="MainContainer">
 		<div class="nav-container">
 			<div class="centered">
-			<p id="pageTitle">Регистрация</p>
+				<p id="pageTitle">Регистрация</p>
 				<a class="nav-element" href="/SportID/tag/">Метки</a> <a
 					class="nav-element" href="/SportID/">Меню</a> <a
-					class="nav-element" href="/SportID/">Забег</a>
+					class="nav-element" href="/SportID/contest/">Забег</a>
 			</div>
 		</div>
 		<div class="container">
 			<div class="column">
-				<form id = "regForm" action="/action_page.php">
-					<label for="fname">Имя</label>
-					<input type="text" id="fname"name="firstname" placeholder="Имя участника">
-					<label for="surname">Фаимлия</label>
-					<input type="text" id="surname"name="lastname" placeholder="Фамилия участника">
-					<label for="Pname">Отчество</label>
-					<input type="text" id="Pname"name="patronymic" placeholder="Отчество участника">
-					<label for="number">Номер</label>
-					<input type="text" id="number" name="number" placeholder="Номер участника">
-					<label for="byear">Год рождения</label>
-					<select id="byear" name="birth-year">
+				<div class="indiContainer">
+					<div class="ReadyContainer">
+						<a>Ридер готов</a> <img id="RR" alt="ридер готов"
+							src="/SportID/images/onlineIndicator.png">
+					</div>
+					<div class="ReadContainer">
+						<a>Идет чтение</a> <img id="RI" alt="чтение остановлено"
+							src="/SportID/images/offlineINdicator.png">
+					</div>
+				</div>
+
+				<button id="ReadBttn">Начать чтение</button>
+				<button id="StopBttn">Остановить чтение</button>
+
+				<div class="listControls">
+					<input type="text" id="listname">
+					<button id="saveList">Сохранить список</button>
+				</div>
+				<div class="listLog"></div>
+				
+			</div>
+			<!--column1 -->
+
+			<div class="column">
+				<form id="regForm" action="/action_page.php">
+					<label for="fname">Имя</label> <input type="text" id="fname"
+						name="firstname" placeholder="Имя участника"> <label
+						for="surname">Фаимлия</label> <input type="text" id="surname"
+						name="lastname" placeholder="Фамилия участника"> <label
+						for="Pname">Отчество</label> <input type="text" id="Pname"
+						name="patronymic" placeholder="Отчество участника"> <label
+						for="number">Номер</label> <input type="text" id="number"
+						name="number" placeholder="Номер участника"> <label
+						for="byear">Год рождения</label> <select id="byear"
+						name="birth-year">
 						<option value="2018">2018</option>
 						<option value="2017">2017</option>
 						<option value="2016">2016</option>
@@ -171,19 +198,18 @@
 						<option value="1907">1907</option>
 						<option value="1906">1906</option>
 						<option value="1905">1905</option>
-					</select>
-					<label for="gender">Пол</label> 
-					<input type="radio" name="gender"value="male" checked>Мужчина
-					<input type="radio" name="gender"value="female">Женщина
-					<input type="radio" name="gender"value="other">Другой
-					<input type="submit"value="Зарегистрировать">
+					</select> <label for="gender">Пол</label> <input type="radio" name="gender"
+						value="male" checked>Мужчина <input type="radio"
+						name="gender" value="female">Женщина <input type="radio"
+						name="gender" value="other">Другой <input type="submit"
+						value="Зарегистрировать">
 				</form>
-				<div id ="form-msg"></div>
+				<div id="form-msg"></div>
 			</div>
-			<!--column1 -->
+			<!--column2 -->
 
-			<div class="column">
-				<label for="senslistcont">EPC метки</label>
+			<div class="column" style="text-align: center;">
+				<label for="senslistcont" style="display:block;">Метки</label>
 				<div id="senslistcont">
 					<table>
 						<tr>
@@ -200,14 +226,11 @@
 					</table>
 				</div>
 			</div>
-			<!--column2 -->
-
-			<div class="column"></div>
-				<div id="htmlLog"></div>
 			<!--column 3 -->
 			<div class="competitors-table-container">
+				<div>
 				<label for="registerTable">Участники</label>
-
+				</div>
 				<div id="registerTable">
 					<table>
 						<tr>
@@ -240,5 +263,6 @@
 				</div>
 			</div>
 		</div>
+	</div>
 </body>
 </html>

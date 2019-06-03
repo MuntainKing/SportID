@@ -1,6 +1,7 @@
 package com.smartrfid.sportid;
 
 public class CompetitionController {
+	FileController fc = new FileController();
 	Competitor[] competitors = new Competitor[40];
 	int competCount = 0;
 	
@@ -22,5 +23,14 @@ public class CompetitionController {
 	}
 	public int getCompetitorsCount() {
 		return competCount;
+	}
+	
+	public void saveCompetitors(String name) {
+		if (competCount > 0)
+		try {
+			fc.saveList(name, competitors, competCount);
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
