@@ -15,13 +15,25 @@ import javax.servlet.http.HttpServletResponse;
 public class ContestSrv extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	FileController fc = new FileController();
-    String[] lists = new String[40];   
+    String[] lists = new String[40];  
+    ReaderController rc;
+
 	
     public ContestSrv() {
 
         super();
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//request.response.getWriter().append("Served at: ").append(request.getContextPath());
+		 rc = (ReaderController) request.getSession().getAttribute("ReadCtr");
+		 PrintWriter out = response.getWriter();
+		 int q = rc.getUniqueTagCount();
+		 out.write(Integer.toString(q));
+		 out.close();
+
+	}
+    
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/plain");
@@ -29,6 +41,29 @@ public class ContestSrv extends HttpServlet {
 		
 		String action = request.getParameter("action");
 		PrintWriter out = response.getWriter();
+		
+		if (action.equals("createTable")) {
+
+			Competitor[] list = new Competitor[40];
+			String listName = request.getParameter("listName");
+			list = fc.retrieveCompetitors(listName);
+			int CompetCount = fc.getCompetCount();
+			System.out.println("Check main");
+			out.print("<table><tr>"
+					+ "<td><p>Участники</p></td>"
+					+ "<td><p>Время прохождения старта</p></td>"
+			);
+			
+			out.print(""		+ "<td><p>Время прохождения финиша</p></td>"
+					+ "</tr>");
+			for (int index = 0; index < CompetCount; index++) {
+				System.out.println("index" + index);
+				if (!list[index].Name.equals("")) out.print("<tr><td><p>" + list[index].Surname + " " + list[index].Number + "</p></td><td></td><td></td></tr>");
+			}
+			out.print("</table>");
+			out.close();
+			
+		}
 		
 		if (action.equals("getLists")) {
 			System.out.println("Getting competitors lists");

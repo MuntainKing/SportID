@@ -8,8 +8,19 @@
 <link rel='stylesheet' id='theme-style-css'
 	href='/SportID/contest/style.css' type='text/css' media='all' />
 <script type="text/javascript" src="/SportID/js/jquery-3.4.1.min.js"></script>
-<script type="text/javascript" src="/SportID/js/x008.js"></script>
-
+<script type="text/javascript" src="/SportID/js/StartReadBtn.js"></script>
+<script type="text/javascript" src="/SportID/js/StopReadBtn.js"></script>
+<script type="text/javascript" src="/SportID/js/GetListOfLists.js"></script>
+<script type="text/javascript" src="/SportID/js/ReaderStatusWorker.js"></script>
+<script type="text/javascript" src="/SportID/js/RetrieveBtn.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {	
+		setTimeout(ReaderStatusWorker,500);
+	    var xmlHttp = new XMLHttpRequest();
+	    xmlHttp.open( "GET", "/SportID/NewServlet", false ); 
+	    xmlHttp.send( null );
+	});
+</script>
 </head>
 <body>
 	<div id="MainContainer">
@@ -37,14 +48,29 @@
 				<button id="ReadBttn">Начать чтение</button>
 				<button id="StopBttn">Остановить чтение</button>
 
-				<div class="listControls">
-					<button id="getLists">Получить списки участников</button>
-				</div>
+				<div class="listControls"></div>
 				<div class="listLog"></div>
-				<select id="lists" >
-					<option>Выберите список</option>
-				</select>
+				<form>
+					<select id="lists">
+						<option>Выберите список</option>
+					</select> <select id="laps">
+						<option value="0">0 контрольных точек</option>
+						<option value="1">1 контрольная точка</option>
+						<option value="2">2 контрольных точки</option>
+						<option value="3">3 контрольных точек</option>
+						<option value="4">4 контрольных точки</option>
+						<option value="5">5 контрольных точек</option>
+						<option value="6">6 контрольных точек</option>
+						<option value="7">7 контрольных точек</option>
+						<option value="8">8 контрольных точек</option>
+						<option value="9">9 контрольных точек</option>
+						<option value="10">10 контрольных точек</option>
+					</select>
 
+				
+		
+				</form>
+					<button id="CreateTableBtn">Загрузить</button>
 			</div>
 			<!--column1 -->
 
@@ -57,7 +83,7 @@
 				
 			</div>
 			<!--column 3 -->
-			
+			<div id="CompetTable"> </div>
 	</div>
 </body>
 </html>

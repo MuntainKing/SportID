@@ -13,8 +13,8 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="C:/Work/Clou/SDK 2.0.2 20161008/JAVA/lib/ClouReaderAPI.jar"/>
 	<classpathentry kind="lib" path="C:/Work/Clou/SDK 2.0.2 20161008/JAVA/lib/RXTXcomm.jar"/>
 	<classpathentry kind="lib" path="C:/Work/apache-tomcat-9.0.20/lib/json-20180813.jar"/>
+	<classpathentry kind="lib" path="C:/Work/Clou/Java SDK/Libs/ClouReaderAPI.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

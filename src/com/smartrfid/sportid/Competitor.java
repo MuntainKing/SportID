@@ -1,13 +1,23 @@
 package com.smartrfid.sportid;
 
 public class Competitor {
-	public String Name = "";
-	public String Surname = "";
-	public String Patron = "";
-	public int Number = 0;
-	public int BYear = 0;
-	public String Gender = "";
-	public String EPC = "";
+	public String Name;
+	public String Surname;
+	public String Patron;
+	public int Number;
+	public int BYear;
+	public String Gender;
+	public String EPC;
+	
+	public Competitor() {
+		this.Name = "";
+		this.Surname = "";
+		this.Patron = "";
+		this.Number = 0;
+		this.BYear = 0;
+		this.Gender = "";
+		this.EPC = "";
+	}
 	
 	public String getEPC() {
 		return EPC;

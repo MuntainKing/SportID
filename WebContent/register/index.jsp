@@ -8,33 +8,20 @@
 <link rel='stylesheet' id='theme-style-css'
 	href='/SportID/register/style.css' type='text/css' media='all' />
 <script type="text/javascript" src="/SportID/js/jquery-3.4.1.min.js"></script>
-<script type="text/javascript" src="/SportID/js/x002.js"></script>
-<script type="text/javascript" src="/SportID/js/x003.js"></script>
-<script type="text/javascript" src="/SportID/js/x005.js"></script>
-<script type="text/javascript" src="/SportID/js/x006.js"></script>
-<script type="text/javascript" src="/SportID/js/x007.js"></script>
+<script type="text/javascript" src="/SportID/js/StartReadBtn.js"></script>
+<script type="text/javascript" src="/SportID/js/StopReadBtn.js"></script>
+<script type="text/javascript" src="/SportID/js/AddCompetitorFrm.js"></script>
+<script type="text/javascript" src="/SportID/js/CompRetriever.js"></script>
+<script type="text/javascript" src="/SportID/js/ReaderStatusWorker.js"></script>
+<script type="text/javascript" src="/SportID/js/RegWorker.js"></script>
+<script type="text/javascript" src="/SportID/js/SaceCmpListBtn.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		setTimeout(worker, 3000);
-		setTimeout(retriever, 1000);
+		setTimeout(RegWorker, 500);
+		setTimeout(CompRetriever, 500);
+		setTimeout(ReaderStatusWorker,500);
 	});
-
-	function worker() {
-		$.ajax({
-			type : 'POST',
-			url : '/SportID/NewServlet',
-			data : {
-				action : 'SensListCheck'
-			},
-			success : function(result) {
-				$('#senslistcont').html(result);
-			},
-			complete : function() {
-				// Schedule the next request when the current one's complete
-				setTimeout(worker, 1000);
-			}
-		});
-	}
+	
 </script>
 </head>
 <body>

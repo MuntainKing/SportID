@@ -99,8 +99,31 @@ button {
   font-size: 16px;
   margin : 2px;
 }
+
 button:hover{
 	background-color: #dd0000;
+}
+.indiContainer{
+	width:80%;
+	display:inline-block;
+}
+
+.ReadyContainer{
+	float:left;
+}
+
+.ReadContainer{
+	float:right;
+}
+
+#RI{
+	width:40px;
+	height:40px;
+}
+
+#RR{
+	width:40px;
+	height:40px;
 }
 
 @media screen and (max-width: 1340px) {

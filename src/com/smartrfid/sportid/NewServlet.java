@@ -14,22 +14,31 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @WebServlet("/NewServlet")
-public class NewServlet extends HttpServlet {
+public class NewServlet extends HttpServlet{
 
 	ReaderController rc = new ReaderController();
 	CompetitionController cc = new CompetitionController();
 	Calendar current;
-
-
+    String sessionID;
+    
+    
 	private static final long serialVersionUID = 1L;
 	
-
+	
 	public NewServlet() {
 		super();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		//request.response.getWriter().append("Served at: ").append(request.getContextPath());
+		String currSessionID = request.getSession().getId();
+		if (! currSessionID.equals(sessionID)) {
+		//request.setAttribute("ReadCtr", rc);
+		request.getSession().setAttribute("ReadCtr", rc);
+		//this.getServletConfig().getServletContext().setAttribute("ReadCtr", rc);
+		request.getRequestDispatcher("/ContestSrv").forward(request, response);
+		sessionID = currSessionID;
+		}
 	}
 
 
@@ -52,14 +61,17 @@ public class NewServlet extends HttpServlet {
 			out.close();
 		}
 		
+		if (action.equals("readStatus")) {
+			if (rc.isConnected()) 
+				out.write("/SportID/images/onlineIndicator.png");
+			else out.write("/SportID/images/offlineINdicator.png");
+			out.close();
+		}
+		
 		if (action.equals("retrieveCompetitors")) {
 			//System.out.println("Retrieveing competitors");
-			if (rc.isConnected()) {
-			out.write("{\"sus\":\"/SportID/images/onlineIndicator.png\",");
-			System.out.println("online");}
-			else out.write("{\"sus\":\"/SportID/images/offlineINdicator.png\",");
-			
-			out.write("\"competitors\":\"<table><tr>" +
+				
+			out.write("<table><tr>" +
 					"<td><p>Порядковый</p></td>" + 
 					"<td><p>Имя</p></td>" + 
 					"<td><p>Фаимлия</p></td>" + 
@@ -84,7 +96,7 @@ public class NewServlet extends HttpServlet {
 							"</tr>");
 				}
 			}
-			out.print("</table>\"}");
+			out.print("</table>");
 			out.close();
 		}
 		
@@ -126,6 +138,7 @@ public class NewServlet extends HttpServlet {
 
 		if (action.equals("startRead")) {
 			rc.COMConnect();
+			//rc.TCPConnect();
 			System.out.println("Reader connected ");
 			out.print("Reader connected<br>");
 			out.close();

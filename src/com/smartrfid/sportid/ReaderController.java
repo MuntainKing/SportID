@@ -7,12 +7,21 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ReaderController implements IAsynchronousMessage {
+	static final int CompetCountConstraint = 40;
+	static final int ControlPointCountConstraint = 10;
 
-	String[] UniqueEPC = new String[40];
-	String[] TagLastSeen = new String[40];
-	String[] RegSensList = new String[40];
-	String[] RegCurrList = new String[40];
-	String[] RegCurrLastSeen = new String[40];
+	String[] UniqueEPC = new String[CompetCountConstraint];
+	String[] TagLastSeen = new String[CompetCountConstraint];
+	String[] RegSensList = new String[CompetCountConstraint];
+	String[] RegCurrList = new String[CompetCountConstraint];
+	String[] RegCurrLastSeen = new String[CompetCountConstraint];
+	
+	Competitor[] competitors = new Competitor[CompetCountConstraint];
+	String[] ContestList = new String[CompetCountConstraint];
+    int TagOffTimeS = 20;
+    
+	int CompetitorsCount;	
+	String[][] ContestTimestamps = new String[CompetCountConstraint][ControlPointCountConstraint];
 	
     int UniqueEPCount = 0;
     int RegListCount = 0;
@@ -20,15 +29,30 @@ public class ReaderController implements IAsynchronousMessage {
     boolean UniqueEPCTag = false;
     boolean UniqueRegTag = false;
     boolean registration = false;
+    boolean contest = false;
     boolean conn = false;
     Calendar CurTime;
-    int[] CurrTime = new int[3];
+
+    int[] CompetStartTime = new int[3];
+    int[] PassedChP = new int[CompetCountConstraint];
+    
+    int[] CurrTime = new int[4];
     int[] CheckTime = new int[3];
     int[] PassedTime = new int[3];
     int[] ParsedTime = new int[3];
     
-    static String tcpParam = "192.168.1.116:9090";
+    static String tcpParam = "192.168.0.116:9090";
     static String commParam = "COM4:115200";
+    
+    public void startCompetition() {
+    	contest = true;
+		CurTime = Calendar.getInstance();
+		CurTime.setTime(new Date());
+		CompetStartTime[0] = CurTime.get(Calendar.HOUR_OF_DAY);
+		CompetStartTime[1] = CurTime.get(Calendar.MINUTE);
+		CompetStartTime[2] = CurTime.get(Calendar.SECOND);
+		CompetStartTime[3] = CurTime.get(Calendar.MILLISECOND);
+    }
     
     public boolean isConnected() {
     	return conn;
@@ -38,6 +62,10 @@ public class ReaderController implements IAsynchronousMessage {
     	RegSensList = UniqueEPC;
     	SensListCount = UniqueEPCount;
     	registration = true;
+    }
+    
+    public void setCompetitors(Competitor[] competitors) {
+    	this.competitors = competitors;
     }
     
     //Отдать епц метки из листа с ласт син 2 сек метками
@@ -97,7 +125,7 @@ public class ReaderController implements IAsynchronousMessage {
     	try {
     		if(conn){
     			System.out.println("connection success...");
-    			CLReader._Tag6C.GetEPC_TID(commParam, 1, 1);
+    			//CLReader._Tag6C.GetEPC_TID(commParam, 1, 1);
     			//CLReader._Config.SetEPCBaseBandParam(connID, basebandMode, qValue, session, searchType)
     			return true;
     		} else {
@@ -132,9 +160,10 @@ public class ReaderController implements IAsynchronousMessage {
     	return UniqueEPCount;
     }
 	
-//	public static void main(String[] args) {
-//	        new ReaderController();
-//	}
+    public void chNetwork() {
+    	System.out.println("netw");
+    	CLReader._Config.SetReaderNetworkPortParam(commParam, "192.168.0.116", "255.255.255.0", "192.168.0.1");
+    }
     
     public void checkExpired() {
 		boolean expired = false;
@@ -221,6 +250,9 @@ public class ReaderController implements IAsynchronousMessage {
 				RegCurrLastSeen[RegListCount] = timeStr;
 				RegListCount++;
 			}
+		}
+		if (contest) {
+			
 		}
 	}
 }
