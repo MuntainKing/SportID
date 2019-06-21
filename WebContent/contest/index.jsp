@@ -13,9 +13,15 @@
 <script type="text/javascript" src="/SportID/js/GetListOfLists.js"></script>
 <script type="text/javascript" src="/SportID/js/ReaderStatusWorker.js"></script>
 <script type="text/javascript" src="/SportID/js/RetrieveBtn.js"></script>
+<script type="text/javascript" src="/SportID/js/StartCompet.js"></script>
+<script type="text/javascript" src="/SportID/js/StopCompet.js"></script>
+<script type="text/javascript" src="/SportID/js/CompetUpdateWorker.js"></script>
+<script type="text/javascript" src="/SportID/js/NewCompet.js"></script>
 <script type="text/javascript">
+	var Contest = false;
 	$(document).ready(function() {	
 		setTimeout(ReaderStatusWorker,500);
+		setTimeout(CompetUpdateWorker,500);
 	    var xmlHttp = new XMLHttpRequest();
 	    xmlHttp.open( "GET", "/SportID/NewServlet", false ); 
 	    xmlHttp.send( null );
@@ -54,10 +60,8 @@
 					<select id="lists">
 						<option>Выберите список</option>
 					</select> <select id="laps">
-						<option value="0">0 контрольных точек</option>
-						<option value="1">1 контрольная точка</option>
 						<option value="2">2 контрольных точки</option>
-						<option value="3">3 контрольных точек</option>
+						<option value="3">3 контрольных точки</option>
 						<option value="4">4 контрольных точки</option>
 						<option value="5">5 контрольных точек</option>
 						<option value="6">6 контрольных точек</option>
@@ -67,10 +71,11 @@
 						<option value="10">10 контрольных точек</option>
 					</select>
 
-				
-		
 				</form>
 					<button id="CreateTableBtn">Загрузить</button>
+					<button id="StartBtn">Старт</button>
+					<button id="StopBtn">Стоп</button>
+					<button id="NewCompetBtn">Новое соревнование</button>
 			</div>
 			<!--column1 -->
 
@@ -83,7 +88,8 @@
 				
 			</div>
 			<!--column 3 -->
-			<div id="CompetTable"> </div>
+			<div id="CompetTable">	</div>
+			<div id="FinalistTable">	</div>
 	</div>
 </body>
 </html>

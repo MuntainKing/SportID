@@ -47,7 +47,7 @@ public class NewServlet extends HttpServlet{
 		request.setCharacterEncoding("UTF-8");
 		current = Calendar.getInstance();
 		current.setTime(new Date());
-		String timeStr = String.format("%d:%02d:%02d", current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE),current.get(Calendar.SECOND));
+		//String timeStr = String.format("%d:%02d:%02d", current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE),current.get(Calendar.SECOND));
 
 		response.setContentType("text/plain");
 		response.setContentType("text/html; charset=utf-8");
@@ -137,14 +137,15 @@ public class NewServlet extends HttpServlet{
 		}
 
 		if (action.equals("startRead")) {
-			rc.COMConnect();
-			//rc.TCPConnect();
+			//rc.COMConnect();
+			rc.TCPConnect();
 			System.out.println("Reader connected ");
 			out.print("Reader connected<br>");
 			out.close();
 		}
 		
 		if (action.equals("stopRead")) {
+			//rc.COMDisconnect();
 			rc.TCPDisconnect();
 			System.out.println("Reader disconnected ");
 			out.print("Reader disconnected<br>");
@@ -159,7 +160,7 @@ public class NewServlet extends HttpServlet{
 	
 		if (action.equals("epcCheckAct")) {
 			String fullname = request.getParameter("fullname");
-			System.out.println("Command: "+ fullname + " " + timeStr);
+			//System.out.println("Command: "+ fullname + " " + timeStr);
 
 			if (fullname.equals("check")) {
 				out.print("<table><tr>"

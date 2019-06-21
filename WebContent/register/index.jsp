@@ -20,8 +20,10 @@
 		setTimeout(RegWorker, 500);
 		setTimeout(CompRetriever, 500);
 		setTimeout(ReaderStatusWorker,500);
+		//$('#fileRequest').attr({target: '_blank', 
+        //    href  : '/SportID/SavedFiles/qwer.csv'});
 	});
-	
+
 </script>
 </head>
 <body>
@@ -53,6 +55,7 @@
 				<div class="listControls">
 					<input type="text" id="listname">
 					<button id="saveList">Сохранить список</button>
+					<a id="fileRequest">Скачать список</a>
 				</div>
 				<div class="listLog"></div>
 				
@@ -63,7 +66,7 @@
 				<form id="regForm" action="/action_page.php">
 					<label for="fname">Имя</label> <input type="text" id="fname"
 						name="firstname" placeholder="Имя участника"> <label
-						for="surname">Фаимлия</label> <input type="text" id="surname"
+						for="surname">Фамилия</label> <input type="text" id="surname"
 						name="lastname" placeholder="Фамилия участника"> <label
 						for="Pname">Отчество</label> <input type="text" id="Pname"
 						name="patronymic" placeholder="Отчество участника"> <label
