@@ -6,10 +6,12 @@ $(document).ready(function(){
 			data: {action: 'saveList',listname : name},
 			url:'/SportID/NewServlet',
 			success: function(result){
+				if (result) {
 				var ListNameInput = document.getElementById("listname");
 				var CurListName = ListNameInput.value;
 				$('#fileRequest').attr({target: '_blank', href  : '../../files/reglist/'+CurListName+'.csv'});
 				$('#listLog').append(result);
+				}
 			}
 		});
 	});

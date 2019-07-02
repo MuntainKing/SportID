@@ -7,9 +7,15 @@
 	display:inline-block;
 }
 
-.TimerContainer{
+.listsTip{
+	display:inline-block;
+	font-size:20px;
+}
+
+#TimerContainer{
 	text-align : center
 }
+
 .Timer{
 	background-color: #9d0000;
     border: none;
@@ -110,11 +116,16 @@ table{
 }
 
 .indiContainer{
-	width:80%;
+	width:100%;
 	display:inline-block;
+	margin:10px;
 }
 
 .ReadyContainer{
+	float:left;
+}
+
+.ReaderP{
 	float:left;
 }
 
@@ -122,14 +133,10 @@ table{
 	float:right;
 }
 
-#RI{
-	width:40px;
-	height:40px;
-}
-
-#RR{
-	width:40px;
-	height:40px;
+#RI, #RR{
+	height:35px;
+	float:right;
+	margin-left:5px;
 }
 
 .nav-container{
@@ -181,6 +188,20 @@ table{
 	text-align:center;
 }
 
+.download_link{
+	  background-color: #9d0000; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin : 5px;
+  max-width:242px;
+  font-family: Arial;
+}
+
 button {
   background-color: #9d0000; 
   border: none;
@@ -190,7 +211,8 @@ button {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin : 2px;
+  margin : 5px;
+  max-width:242px;
 }
 button:hover{
 	background-color: #dd0000;

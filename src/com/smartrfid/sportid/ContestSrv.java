@@ -1,6 +1,5 @@
 package com.smartrfid.sportid;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -20,11 +19,12 @@ public class ContestSrv extends HttpServlet {
     String[][] ContestTimestamps = new String[40][10];
     int ControlPoints;
     int CompetCount;
+    int FinCount;
     String listName;
     Competitor[] list = new Competitor[40];
     String[][] Finalists = new String[40][2];
     //private static final String CompetitorsListPath = "C:\\Work\\savedfiles\\";
-    private static final String CompetitorsListPath = "/usr/lib/tomcat9/apache-tomcat-9.0.20/files/reglist/";
+    //private static final String CompetitorsListPath = "../../files/reglist/TestList.csv";
 	
     public ContestSrv() {
         super();
@@ -48,6 +48,8 @@ public class ContestSrv extends HttpServlet {
 		String action = request.getParameter("action");
 		PrintWriter out = response.getWriter();
 		
+		
+		//Старт соревнования
 		if (action.equals("StartCompet")) {
 			// кнопка старт - отсчет пошёл, отдать ?старт таймера?
 			rc.initChP();
@@ -55,10 +57,11 @@ public class ContestSrv extends HttpServlet {
 			System.out.println("Competition started");
 		}
 		
+		//Стоп соревнования
 		if (action.equals("StopCompet")) {
 			rc.stopCompetition();
 			Finalists = rc.getFinalists();
-			int FinCount = rc.getFinalistCount();
+			FinCount = rc.getFinalistCount();
 			
 			out.print("<table><tr>"
 					+ "<td><p>Место</p></td>"
@@ -87,26 +90,43 @@ public class ContestSrv extends HttpServlet {
 			
 		}
 		
+		//Удалить список участников или результат соревнования
+		if (action.equals("deleteFile")) {
+			String valueString = request.getParameter("value");
+			boolean filetype = Boolean.parseBoolean(request.getParameter("filetype"));
+			if (!valueString.contains("/")) fc.deleteFile(valueString,filetype);
+			System.out.println("Deleting file "+valueString);
+		}
+		
+		//Восстановить отображение соревнования при уходе-возвращении на страницу соревнования
+		if (action.equals("CompetRestore")) {
+			if (rc.isCompetitionStarted()) out.print(true);
+			System.out.println("Compet restore ");
+		}
+		
+		//Сброс информации о текущем соревновании и подготовка к новому
 		if (action.equals("NewCompet")) {
 			rc.newCompet();	
 			createCompetTable(listName,ControlPoints,out);
 		}
 		
+		//Обновление таблицы соревнования
 		if (action.equals("UpdateCompet")) {
 			// обновляем таблицу. Берём ТСы у ридер контроллера, формируем хтмл таблицу и отправляем
 			
 				ContestTimestamps = rc.getTimeStamps();
 				
 				//Выводим таймер
-				out.print("<div class=\"TimerContainer\">");
+				//out.print("<div class=\"TimerContainer\">");
 				if (rc.isCompetitionStarted()) {
 				String TimerStr = rc.getTimerString();
-				out.print("<div class = \"Timer\">"+TimerStr+"</div>");}
-				else out.print("<div class = \"Timer\">00:00:00:000</div>");
-				out.print("</div>");
+				//out.print("<div class = \"Timer\">"+TimerStr+"</div>");}
+				out.print("{\"timer\":\"<div class = \\\"Timer\\\">"+TimerStr+"</div>");}
+				else out.print("{\"timer\":\"<div class = \"Timer\">00:00:00:000</div>");
+				out.print("</div>\",");
 				
 				//формируем шапку таблицы
-				out.print("<table><tr>"
+				out.print("\"data\":\"<table><tr>"
 						+ "<td><p>Участники</p></td>"
 						+ "<td><p>Время прохождения старта</p></td>");
 				
@@ -130,10 +150,11 @@ public class ContestSrv extends HttpServlet {
 						}
 					out.print("</tr>");
 				}
-				out.print("</table>");
+				out.print("</table>\"}");
 				out.close();	
 		}
 		
+		//Формирование таблицы по вводным данным
 		if (action.equals("createTable")) {
 			listName = request.getParameter("listName");
 			ControlPoints = Integer.parseInt(request.getParameter("lapsCount"));		
@@ -141,6 +162,7 @@ public class ContestSrv extends HttpServlet {
 			
 		}
 		
+		//Получить список списков участников - Contest, Results
 		if (action.equals("getLists")) {
 			System.out.println("Getting competitors lists");
 			lists = fc.getListofLists();
@@ -152,6 +174,20 @@ public class ContestSrv extends HttpServlet {
 				if (index != listCount-1) out.write(",");
 			}
 			out.write("]}");
+			out.close();
+		}
+		
+		//Сохранить результат в файл
+		if (action.equals("saveResult")) {
+			String listName = request.getParameter("ResultTitle");
+			if (!listName.equals("") & !listName.contains("/"))
+			try {
+				fc.SaveResult(listName,list,Finalists,FinCount);
+				System.out.println("Saving " + listName + " FinCount "+ FinCount);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			out.close();
 		}
 	}

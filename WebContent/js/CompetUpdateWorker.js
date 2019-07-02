@@ -6,12 +6,15 @@
 				action : 'UpdateCompet'
 			},
 			success : function(result) {
-				if (window.Contest)
-				$('#CompetTable').html(result);
+				if (window.Contest){
+					var inputStr = JSON.parse(result);
+					$('#TimerContainer').html(inputStr.timer);
+					$('#CompetTable').html(inputStr.data);
+				}
 			},
 			complete : function() {
 
-				setTimeout(CompetUpdateWorker, 100);
+				setTimeout(CompetUpdateWorker, 160);
 			}
 		});
 	}

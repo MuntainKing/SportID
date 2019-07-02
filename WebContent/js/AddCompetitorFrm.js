@@ -7,6 +7,12 @@ $(document).ready(function(){
 		var number = $("#number").val();
 		var byear = $("#byear").val();
 		var radioValue = $("input[name='gender']:checked").val();
+		var EditCheckBox = document.getElementById("edit");
+		if (EditCheckBox.checked == true){
+			var edit = true;
+		} else {
+			var edit = false;
+		}
 		try{
 		var targetEPC = document.getElementById("targetEPC").innerHTML;
 		$.ajax({
@@ -18,7 +24,8 @@ $(document).ready(function(){
 			number:number,
 			byear:byear,
 			radioValue:radioValue,
-			targetEPC:targetEPC},
+			targetEPC:targetEPC,
+			edit:edit},
 			url:'/SportID/NewServlet',
 			success: function(result){
 				$('#form-msg').html(result);

@@ -1,12 +1,8 @@
 function TagWorker() {
-		var updcmd = "check";
 		$.ajax({
 			type : 'POST',
 			url : '/SportID/NewServlet',
-			data : {
-				fullname : updcmd,
-				action : 'epcCheckAct'
-			},
+			data : {action : 'epcCheckAct'},
 			success : function(result) {
 				$('#ajaxresponse').html(result);
 			},

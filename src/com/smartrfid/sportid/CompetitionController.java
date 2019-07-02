@@ -5,15 +5,8 @@ public class CompetitionController {
 	Competitor[] competitors = new Competitor[40];
 	int competCount = 0;
 	
-	public void addCompetitor(String Name, String Surname, String Patron, int number, int bYear, String Gender, String EPC) {
-		competitors[competCount] = new Competitor();
-		competitors[competCount].Name = Name;
-		competitors[competCount].Surname = Surname;
-		competitors[competCount].Patron = Patron;
-		competitors[competCount].Number = number;
-		competitors[competCount].BYear = bYear;
-		competitors[competCount].Gender = Gender;
-		competitors[competCount].EPC = EPC;
+	public void addCompetitor(String Name, String Surname, String Patron, String number, String bYear, String Gender, String EPC) {
+		competitors[competCount] = new Competitor(Name,Surname,Patron,number,bYear,Gender,EPC);
 		competCount++;
 	}
 	
@@ -23,6 +16,22 @@ public class CompetitionController {
 	}
 	public int getCompetitorsCount() {
 		return competCount;
+	}
+	
+	public void resetCompetitors() {
+		for (int i = 0; i < competCount; i++) {
+			competitors[i] = null;
+		}
+		competCount = 0;
+	}
+	
+	public void editCompetitor(String Name, String Surname, String Patron, String number, String bYear, String Gender, int index) {
+		competitors[index].Name = Name;
+		competitors[index].Surname = Surname;
+		competitors[index].Patron = Patron;
+		competitors[index].Number = number;
+		competitors[index].BYear = bYear;
+		competitors[index].Gender = Gender;
 	}
 
 	

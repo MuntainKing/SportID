@@ -66,9 +66,15 @@ table{
 	display: inline-block;
 	width:25%;
 	border: 1px solid #c6cfd6;
+	white-space: nowrap;
 }
 
 .nav-element:hover, .nav-element:active {
    background-color: #dd0000;
+}
+@media screen and (max-width: 980px) {
+  .centered {
+    width: 100%;
+  }
 }
 

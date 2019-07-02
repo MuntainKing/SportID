@@ -16,7 +16,7 @@
 <div class = "nav-container">
 <div class = "centered">
 <a class = "nav-element" href="/SportID/tag/">
-Метки
+Проверка меток
 </a>
 
 <a class = "nav-element" href="/SportID/register/">
@@ -27,7 +27,7 @@
 Забег
 </a>
 
-<a class = "nav-element" href="/SportID/">
+<a class = "nav-element" href="/SportID/results/">
 Результаты
 </a>
 </div>

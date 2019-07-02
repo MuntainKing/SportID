@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -17,6 +18,8 @@
 <script type="text/javascript" src="/SportID/js/StopCompet.js"></script>
 <script type="text/javascript" src="/SportID/js/CompetUpdateWorker.js"></script>
 <script type="text/javascript" src="/SportID/js/NewCompet.js"></script>
+<script type="text/javascript" src="/SportID/js/SaveResult.js"></script>
+<script type="text/javascript" src="/SportID/js/CompetRestore.js"></script>
 <script type="text/javascript">
 	var Contest = false;
 	$(document).ready(function() {	
@@ -35,18 +38,18 @@
 				<p id="pageTitle">Соревнование</p>
 				<a class="nav-element" href="/SportID/register/">Регистрация</a>
 				<a class="nav-element" href="/SportID/">Меню</a>
-				<a class="nav-element" href="/SportID/">Результаты</a>
+				<a class="nav-element" href="/SportID/results/">Результаты</a>
 			</div>
 		</div>
 		<div class="container">
 			<div class="column">
 				<div class="indiContainer">
 					<div class="ReadyContainer">
-						<a>Ридер готов</a> <img id="RR" alt="ридер готов"
+						<p class = "ReaderP">Ридер готов</p> <img id="RR" alt="ридер готов"
 							src="/SportID/images/onlineIndicator.png">
 					</div>
 					<div class="ReadContainer">
-						<a>Идет чтение</a> <img id="RI" alt="чтение остановлено"
+						<p class = "ReaderP">Идет чтение</p> <img id="RI" alt="чтение остановлено"
 							src="/SportID/images/offlineINdicator.png">
 					</div>
 				</div>
@@ -56,26 +59,33 @@
 
 				<div class="listControls"></div>
 				<div class="listLog"></div>
-				<form>
-					<select id="lists">
-						<option>Выберите список</option>
-					</select> <select id="laps">
-						<option value="2">2 контрольных точки</option>
-						<option value="3">3 контрольных точки</option>
-						<option value="4">4 контрольных точки</option>
-						<option value="5">5 контрольных точек</option>
-						<option value="6">6 контрольных точек</option>
-						<option value="7">7 контрольных точек</option>
-						<option value="8">8 контрольных точек</option>
-						<option value="9">9 контрольных точек</option>
-						<option value="10">10 контрольных точек</option>
-					</select>
-
-				</form>
-					<button id="CreateTableBtn">Загрузить</button>
-					<button id="StartBtn">Старт</button>
-					<button id="StopBtn">Стоп</button>
-					<button id="NewCompetBtn">Новое соревнование</button>
+				<label class="listsTip">Участники</label>
+				<select id="lists">
+					<option>Выберите список</option>
+				</select>
+				<select id="laps">
+					<option value="2">2 контрольных точки</option>
+					<option value="3">3 контрольных точки</option>
+					<option value="4">4 контрольных точки</option>
+					<option value="5">5 контрольных точек</option>
+					<option value="6">6 контрольных точек</option>
+					<option value="7">7 контрольных точек</option>
+					<option value="8">8 контрольных точек</option>
+					<option value="9">9 контрольных точек</option>
+					<option value="10">10 контрольных точек</option>
+				</select>
+				<button style="width:100%" id="CreateTableBtn">Сформировать таблицу</button>
+				<button style="width:100%" id="StartBtn">Старт</button>
+				<button style="width:100%" id="StopBtn">Стоп</button>	
+				<button style="width:100%" id="NewCompetBtn">Новое соревнование</button>
+				
+				<div style="width:100%">
+					<h2>Назовите соревнование :</h2>
+					<input type="text" id="ContestName">
+				
+				<button id="SaveBtn">Сохранить результат</button>
+				<a class="download_link" id="DownloadRes">Скачать результат</a>
+				</div>
 			</div>
 			<!--column1 -->
 
@@ -88,8 +98,12 @@
 				
 			</div>
 			<!--column 3 -->
+			<div id="TimerContainer">
+			<div class = "Timer">00:00:00:000</div>
+			</div>
 			<div id="CompetTable">	</div>
 			<div id="FinalistTable">	</div>
 	</div>
+</div>
 </body>
 </html>

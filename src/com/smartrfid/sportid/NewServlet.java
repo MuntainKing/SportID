@@ -47,7 +47,7 @@ public class NewServlet extends HttpServlet{
 		request.setCharacterEncoding("UTF-8");
 		current = Calendar.getInstance();
 		current.setTime(new Date());
-		//String timeStr = String.format("%d:%02d:%02d", current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE),current.get(Calendar.SECOND));
+		String timeStr = String.format("%d:%02d:%02d", current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE),current.get(Calendar.SECOND));
 
 		response.setContentType("text/plain");
 		response.setContentType("text/html; charset=utf-8");
@@ -55,12 +55,14 @@ public class NewServlet extends HttpServlet{
 		String action = request.getParameter("action");
 		PrintWriter out = response.getWriter();
 		
+		//Сохранение чувствительного списка меток - Tag
 		if (action.equals("savingAct")) {
 			rc.saveSensList();
 			System.out.println("Sens list saved");
 			out.close();
 		}
 		
+		//Обновление индикатора соединения с ридером - Tag, Register, Contest
 		if (action.equals("readStatus")) {
 			if (rc.isConnected()) 
 				out.write("/SportID/images/onlineIndicator.png");
@@ -68,9 +70,9 @@ public class NewServlet extends HttpServlet{
 			out.close();
 		}
 		
+		//Вывести в виде таблицы текущий список зарегистрированных участников -Register
 		if (action.equals("retrieveCompetitors")) {
-			//System.out.println("Retrieveing competitors");
-				
+			//System.out.println("Retrieveing competitors");		
 			out.write("<table><tr>" +
 					"<td><p>Порядковый</p></td>" + 
 					"<td><p>Имя</p></td>" + 
@@ -100,12 +102,16 @@ public class NewServlet extends HttpServlet{
 			out.close();
 		}
 		
+		//Сохранить список участников в файл - Register
 		if (action.equals("saveList")) {
 			String listName = request.getParameter("listname");
-			out.print(cc.saveCompetitors(listName));
-			out.close();
+			if (!listName.equals("") & !listName.contains("/")) {
+				out.print(cc.saveCompetitors(listName));
+				out.close();
+			}
 		}
 		
+		//Регистрация участника - Register
 		if (action.equals("saveCompetitor")) {
 			System.out.println("Saving competitor");
 			String name = request.getParameter("name");
@@ -115,83 +121,137 @@ public class NewServlet extends HttpServlet{
 			String byear = request.getParameter("byear");
 			String radioValue = request.getParameter("radioValue");
 			String targetEPC = request.getParameter("targetEPC");
+			boolean edit = Boolean.parseBoolean(request.getParameter("edit"));
 			if (name.equals("") || surname.equals("") || Pname.equals("")|| number.equals(""))
 				out.print("<span class=\"form-error\"> Заполните все поля </span>");
 			else {
 				String regex = "[0-9]+";
 				if (!number.matches(regex)) out.print("<span class=\"form-error\"> Номер может содержать только цифры </span>");
 				else {
+					//Все поля заполнены и заполнены правильно
 					int ci2 = cc.getCompetitorsCount();
-					boolean duplicate = false;
-					for (int index = 0; index < ci2; index++) {
-						if (cc.getCompetitor(index).EPC.contentEquals(targetEPC)) duplicate = true; // toDO: handle compet correction
+					boolean editCompleted = false;;
+					if (edit) {
+						for (int index = 0; index < ci2; index++) 
+							if (cc.getCompetitor(index).EPC.equals(targetEPC)) {
+								cc.editCompetitor(name, surname, Pname, number, byear, radioValue, index);
+								editCompleted = true;
+							}
+						if (editCompleted) out.print("<span class=\"form-error\"> Данные участника отредактированы </span>");
+						else out.print("<span class=\"form-error\"> Нет участника с такой меткой </span>");
+						
 					}
-					if (duplicate == false) { 
-						cc.addCompetitor(name, surname, Pname, Integer.parseInt(number), Integer.parseInt(byear), radioValue, targetEPC);
-						out.print("<span class=\"form-success\"> Участник зарегистрирован </span>");
-					} else out.print("<span class=\"form-error\"> Метка уже зарегистрирована </span>");
-
+					else {
+						
+						boolean duplicate = false;
+						boolean duplicateCompet = false;
+						for (int index1 = 0; index1 < ci2; index1++) {
+							if (cc.getCompetitor(index1).EPC.equals(targetEPC)) duplicate = true; // toDO: handle compet correction
+							if (cc.getCompetitor(index1).Name.equals(name) &
+									cc.getCompetitor(index1).Surname.equals(surname) &
+									cc.getCompetitor(index1).Patron.equals(Pname) &
+									cc.getCompetitor(index1).Number == number &
+									cc.getCompetitor(index1).BYear == byear &
+									cc.getCompetitor(index1).Gender.equals(radioValue)) duplicateCompet = false;
+						}
+						if (!duplicate & !duplicateCompet) { 
+							cc.addCompetitor(name, surname, Pname, number, byear, radioValue, targetEPC);
+							out.print("<span class=\"form-success\"> Участник зарегистрирован </span>");
+						} else if (duplicateCompet == false) out.print("<span class=\"form-error\"> Участник с такими данными уже зарегистрирован </span>");
+						else out.print("<span class=\"form-error\"> Эта метка уже зарегистрирована </span>");
+					}
 				}
 			}
 			out.close();
 		}
 
+		//Подключение к ридеру - Tag,Register, Contest
 		if (action.equals("startRead")) {
 			//rc.COMConnect();
 			rc.TCPConnect();
-			System.out.println("Reader connected ");
-			out.print("Reader connected<br>");
-			out.close();
 		}
 		
+		//Отключение от ридеоа - Tag,Register, Contest
 		if (action.equals("stopRead")) {
 			//rc.COMDisconnect();
 			rc.TCPDisconnect();
-			System.out.println("Reader disconnected ");
-			out.print("Reader disconnected<br>");
-			out.close();
 		}
 		
+		// Сброс чувствительного списка меток - Tag
 		if (action.equals("resetTags")) {
 			rc.resetEPC();
 			out.print("Tags reset <br>");
 			out.close();
 		}
 	
+		//Обновлене списка меток - Tag
 		if (action.equals("epcCheckAct")) {
-			String fullname = request.getParameter("fullname");
-			//System.out.println("Command: "+ fullname + " " + timeStr);
+			//System.out.println("Epc Check: "+ timeStr);
 
-			if (fullname.equals("check")) {
-				out.print("<table><tr>"
-						+ "<td><p>№</p></td>"
-						+ "<td><p>EPC</p></td>"
-						+ "<td><p>Last seen</p></td>"
-						+ "</tr>");
-				int i = rc.getUniqueTagCount();
-				if (i != 0) {
-					for (int index = 0; index < i; index++) {
-						int hi = index + 1;
-						out.print("		<td>\r\n" + 
-								"			<p>"+ hi +"</p>\r\n" + 
-								"		</td>\r\n" + 
-								"		<td>\r\n" + 
-								"			<p>" + rc.getEPC(index) + "</p>\r\n" + 
-								"		</td>\r\n" + 
-								"		<td>\r\n" + 
-								"			<p>" + rc.getLastTimestamp(index)+"</p>\r\n" + 
-								"		</td>\r\n" + 
-								"	</tr>");
+			out.print("<table><tr>"
+					+ "<td><p>№</p></td>"
+					+ "<td><p>EPC</p></td>"
+					+ "<td><p>Last seen</p></td>"
+					+ "</tr>");
+			int i = rc.getUniqueTagCount();
+			
+			if (i != 0) {
+				//System.out.println("rc.getRegTimestamp(0): "+ rc.getLastTimestamp(0));
+				for (int index = 0; index < i; index++) {
+					int[] CheckTime = new int[3];
+					int[] ParsedTime = new int[3];
+					int[] PassedTime = new int[3];
+					boolean expired = false;
+					CheckTime[0] = current.get(Calendar.HOUR_OF_DAY);
+					CheckTime[1] = current.get(Calendar.MINUTE);
+					CheckTime[2] = current.get(Calendar.SECOND);
+
+					String[] pairs = rc.getLastTimestamp(index).split(":");			
+					for (int i1 = 0; i1 < pairs.length; i1++) {
+						ParsedTime[0] = Integer.parseInt(pairs[0]);
+						ParsedTime[1] = Integer.parseInt(pairs[1]);
+						ParsedTime[2] = Integer.parseInt(pairs[2]);
 					}
+					PassedTime[0] = CheckTime[0] - ParsedTime[0];
+					PassedTime[1] = CheckTime[1] - ParsedTime[1];
+					PassedTime[2] = CheckTime[2] - ParsedTime[2];
+					if (PassedTime[1] < 0) {
+						PassedTime[0]--;
+						PassedTime[1]=PassedTime[1]+60;
+						if (PassedTime[2] < 0) {
+							PassedTime[1]--;
+							PassedTime[2]=PassedTime[2]+60;
+						}
+					}
+					if (PassedTime[0]>0 || PassedTime[1]>0 || PassedTime[2]>2){
+						expired = true;
+						
+					}
+					//System.out.println("expired "+expired);
+					
+					int hi = index + 1;
+					out.print("<tr ");
+					if (!expired) out.print("class = \"newTag\" ");
+					out.print("><td>\r\n" + 
+							"			<p>"+ hi +"</p>\r\n" + 
+							"		</td>\r\n" + 
+							"		<td>\r\n" + 
+							"			<p>" + rc.getEPC(index) + "</p>\r\n" + 
+							"		</td>\r\n" + 
+							"		<td>\r\n" + 
+							"			<p>" + rc.getLastTimestamp(index)+"</p>\r\n" + 
+							"		</td>\r\n" + 
+							"	</tr>");
 				}
-				out.print("</table>");
 			}
+			out.print("</table>");
 			out.close();
 		}
 		
+		//Вывод спсика меток из чувствительного списка для регистрации
 		if (action.equals("SensListCheck")) {
 			rc.checkExpired();
-			//System.out.println("Sens List check " + timeStr);
+			System.out.println("Sens List check " + timeStr);
 			int i = rc.getRegListCount();
 			if (i != 0) {
 				out.print("<table>	<tr>\r\n" + 
@@ -205,9 +265,9 @@ public class NewServlet extends HttpServlet{
 						"			<p>Last seen</p>\r\n" + 
 						"		</td>\r\n" + 
 						"	</tr>");
-				for (int index = 0; index < i; index++) {
-					int hi = index + 1;
-					out.print("		<td>\r\n" + 
+				for (int index = 0; index < i; index++) {					
+					int hi = index + 1;			
+					out.print("	<tr><td>\r\n" + 
 							"			<p>"+ hi +"</p>\r\n" + 
 							"		</td>\r\n" + 
 							"		<td>\r\n" + 

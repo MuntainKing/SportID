@@ -4,19 +4,19 @@ public class Competitor {
 	public String Name;
 	public String Surname;
 	public String Patron;
-	public int Number;
-	public int BYear;
+	public String Number;
+	public String BYear;
 	public String Gender;
 	public String EPC;
 	
-	public Competitor() {
-		this.Name = "";
-		this.Surname = "";
-		this.Patron = "";
-		this.Number = 0;
-		this.BYear = 0;
-		this.Gender = "";
-		this.EPC = "";
+	public Competitor(String Name, String Surname, String Patron, String Number, String BYear, String Gender, String EPC) {
+		this.Name = Name;
+		this.Surname = Surname;
+		this.Patron = Patron;
+		this.Number = Number;
+		this.BYear = BYear;
+		this.Gender = Gender;
+		this.EPC = EPC;
 	}
 	
 	public String getEPC() {
@@ -43,16 +43,16 @@ public class Competitor {
 	public void setPatron(String patron) {
 		Patron = patron;
 	}
-	public int getNumber() {
+	public String getNumber() {
 		return Number;
 	}
-	public void setNumber(int number) {
+	public void setNumber(String number) {
 		Number = number;
 	}
-	public int getBYear() {
+	public String getBYear() {
 		return BYear;
 	}
-	public void setBYear(int bYear) {
+	public void setBYear(String bYear) {
 		BYear = bYear;
 	}
 	public String getGender() {

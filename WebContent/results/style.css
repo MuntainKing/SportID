@@ -7,6 +7,20 @@
 	display:inline-block;
 }
 
+.TimerContainer{
+	text-align : center
+}
+.Timer{
+	background-color: #9d0000;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 2px;
+}
+
 .footer{
 height : 300px;	
 }
@@ -19,6 +33,8 @@ input[type=text], select {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  max-width:265px;
+  font-size: 18px;
 }
 
 #form-msg{
@@ -81,7 +97,7 @@ table td{
     vertical-align: middle;
     border: 1px solid #c6cfd6;
     font-size: 14px;
-	min-width: 10em;
+	min-width: 6em;
 	
 }
 
@@ -94,42 +110,26 @@ table{
 }
 
 .indiContainer{
-	width:100%;
+	width:80%;
 	display:inline-block;
-	margin:10px;
 }
 
 .ReadyContainer{
 	float:left;
-	margin:3px;
 }
 
 .ReadContainer{
 	float:right;
-	margin:3px;
 }
 
-.ReaderP{
-	float:left;
+#RI{
+	width:40px;
+	height:40px;
 }
 
-#RI, #RR{
-	height:35px;
-	float:right;
-	margin-left:5px;
-}
-
-.download_link{
-	background-color: #9d0000; 
- 	border: none;
-  	color: white;
-  	padding: 15px 32px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	margin:5px;
-	font-family: Arial;
+#RR{
+	width:40px;
+	height:40px;
 }
 
 .nav-container{
@@ -160,10 +160,8 @@ table{
    background-color: #dd0000;
 }
 
-/* Create two equal columns that floats next to each other */
 .column {
   float: left;
-  width: 33.33%;
   padding: 10px;
 }
 
@@ -181,7 +179,7 @@ table{
 	text-align:center;
 }
 
-button {
+button, .downloadLink {
   background-color: #9d0000; 
   border: none;
   color: white;
@@ -190,8 +188,10 @@ button {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin:5px;
+  margin : 5px;
+  font-family: Arial;
 }
+
 button:hover{
 	background-color: #dd0000;
 }
