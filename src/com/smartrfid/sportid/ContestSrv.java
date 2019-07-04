@@ -35,7 +35,7 @@ public class ContestSrv extends HttpServlet {
 		 rc = (ReaderController) request.getSession().getAttribute("ReadCtr");
 		 PrintWriter out = response.getWriter();
 		 int q = rc.getUniqueTagCount();
-		 out.write(Integer.toString(q));
+		 out.print(Integer.toString(q));
 		 out.close();
 
 	}
@@ -114,44 +114,45 @@ public class ContestSrv extends HttpServlet {
 		if (action.equals("UpdateCompet")) {
 			// обновляем таблицу. Берём ТСы у ридер контроллера, формируем хтмл таблицу и отправляем
 			
-				ContestTimestamps = rc.getTimeStamps();
+			ContestTimestamps = rc.getTimeStamps();
 				
-				//Выводим таймер
-				//out.print("<div class=\"TimerContainer\">");
-				if (rc.isCompetitionStarted()) {
-				String TimerStr = rc.getTimerString();
-				//out.print("<div class = \"Timer\">"+TimerStr+"</div>");}
-				out.print("{\"timer\":\"<div class = \\\"Timer\\\">"+TimerStr+"</div>");}
-				else out.print("{\"timer\":\"<div class = \"Timer\">00:00:00:000</div>");
-				out.print("</div>\",");
+			//Выводим таймер
+			if (rc.isCompetitionStarted()) {
+			String TimerStr = rc.getTimerString();
+			out.print("{\"timer\":\"<div class = \\\"Timer\\\">"+TimerStr+"</div>");}
+			else out.print("{\"timer\":\"<div class = \\\"Timer\\\">00:00:00:000</div>");
+			out.print("</div>\",");
 				
-				//формируем шапку таблицы
-				out.print("\"data\":\"<table><tr>"
-						+ "<td><p>Участники</p></td>"
-						+ "<td><p>Время прохождения старта</p></td>");
+			out.print("\"data\":\"<div class=\\\"col-md-12\\\"><div class=\\\"card\\\">");
+			out.print("<div class=\\\"card-body\\\"><div class=\\\"table-responsive\\\"><table class=\\\"table\\\"><thead class=\\\" text-primary\\\">");
 				
-				for (int index = 0; index < ControlPoints-2; index++) 
-					out.print("<td><p>Время прохождения "+ (index + 1) +" точки</p></td>");
+				
+			//формируем шапку таблицы
+			out.print("<th>Участники</th>"
+					+ "<th>Время прохождения старта</th>");
+				
+			for (int index = 0; index < ControlPoints-2; index++) 
+				out.print("<th>Время прохождения "+ (index + 1) +" точки</th>");
 						
-				out.print("<td><p>Время прохождения финиша</p></td></tr>");
+			out.print("<th>Время прохождения финиша</th></thead><tbody>");
 				
-				// тело таблицы
-				for (int index = 0; index < CompetCount; index++) { // строки, участнки
+			// тело таблицы
+			for (int index = 0; index < CompetCount; index++) { // строки, участнки
 					
-					if (!list[index].Name.equals("")) out.print("<tr><td><p>" + list[index].Surname + " " + list[index].Number + "</p></td>");
+				if (!list[index].Name.equals("")) out.print("<tr><td>" + list[index].Surname + " " + list[index].Number + "</td>");
 				
 					
-					for (int index2 = 0; index2 < ControlPoints; index2++) { // столбцы, контрольные точки
-						out.print("<td>");
-						//System.out.println("ContestTimestamps " + ContestTimestamps[index][index2]);
-						if (ContestTimestamps[index][index2] != null) out.print(ContestTimestamps[index][index2]);
-						else out.print("");
-						out.print("</td>");
-						}
-					out.print("</tr>");
-				}
-				out.print("</table>\"}");
-				out.close();	
+				for (int index2 = 0; index2 < ControlPoints; index2++) { // столбцы, контрольные точки
+					out.print("<td>");
+					//System.out.println("ContestTimestamps " + ContestTimestamps[index][index2]);
+					if (ContestTimestamps[index][index2] != null) out.print(ContestTimestamps[index][index2]);
+					else out.print("");
+					out.print("</td>");
+					}
+				out.print("</tr>");
+			}
+			out.print("</tbody></table></div></div></div></div>\"}");
+			out.close();	
 		}
 		
 		//Формирование таблицы по вводным данным
@@ -167,13 +168,13 @@ public class ContestSrv extends HttpServlet {
 			System.out.println("Getting competitors lists");
 			lists = fc.getListofLists();
 			int listCount = fc.getListCount();
-			out.write("{\"count\":"+ listCount + ",");
-			out.write("\"data\":[");
+			out.print("{\"count\":"+ listCount + ",");
+			out.print("\"data\":[");
 			for (int index = 0; index < listCount; index++) {
-				out.write("\"" + lists[index] + "\"");
-				if (index != listCount-1) out.write(",");
+				out.print("\"" + lists[index] + "\"");
+				if (index != listCount-1) out.print(",");
 			}
-			out.write("]}");
+			out.print("]}");
 			out.close();
 		}
 		
@@ -198,23 +199,26 @@ public class ContestSrv extends HttpServlet {
 		rc.setCheckPoints(ControlPoints);
 		rc.setCompetitors(list);
 		rc.setCompetCount(CompetCount);
-		out.print("<table><tr>"
-				+ "<td><p>Участники</p></td>"
-				+ "<td><p>Время прохождения старта</p></td>"
+		
+		out.print("<div class=\"col-md-12\"><div class=\"card\">");
+		out.print("<div class=\"card-body\"><div class=\"table-responsive\"><table class=\"table\"><thead class=\" text-primary\">");
+			
+		
+		out.print("<th>Участники</th>"
+				+ "<th>Время прохождения старта</th>"
 		);
 		for (int index = 0; index < ControlPoints-2; index++) {
-		out.print("<td><p>Время прохождения "+ (index + 1) +" точки</p></td>");
+		out.print("<th>Время прохождения "+ (index + 1) +" точки</th>");
 		}
-		out.print("<td><p>Время прохождения финиша</p></td></tr>");
-		for (int index = 0; index < CompetCount; index++) {
-			
-			if (!list[index].Name.equals("")) out.print("<tr><td><p>" + list[index].Surname + " " + list[index].Number + "</p></td><td></td>");
+		out.print("<th>Время прохождения финиша</th></thead><tbody>");
+		for (int index = 0; index < CompetCount; index++) {		
+			if (!list[index].Name.equals("")) out.print("<tr><td>" + list[index].Surname + " " + list[index].Number + "</td><td></td>");
 			for (int index2 = 0; index2 < ControlPoints-2; index2++) {
 				out.print("<td></td>");
 				}
 			out.print("<td></td></tr>");
 		}
-		out.print("</table>");
+		out.print("</tbody></table></div></div></div></div>");
 		out.close();
 	}
 	

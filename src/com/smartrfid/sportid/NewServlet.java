@@ -48,7 +48,6 @@ public class NewServlet extends HttpServlet{
 		current = Calendar.getInstance();
 		current.setTime(new Date());
 		String timeStr = String.format("%d:%02d:%02d", current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE),current.get(Calendar.SECOND));
-
 		response.setContentType("text/plain");
 		response.setContentType("text/html; charset=utf-8");
 
@@ -72,33 +71,32 @@ public class NewServlet extends HttpServlet{
 		
 		//Вывести в виде таблицы текущий список зарегистрированных участников -Register
 		if (action.equals("retrieveCompetitors")) {
-			//System.out.println("Retrieveing competitors");		
-			out.write("<table><tr>" +
-					"<td><p>Порядковый</p></td>" + 
-					"<td><p>Имя</p></td>" + 
-					"<td><p>Фаимлия</p></td>" + 
-					"<td><p>Отчество</p></td>" + 
-					"<td><p>Номер</p></td>" + 
-					"<td><p>Год рождения</p></td>" + 
-					"<td><p>Пол</p></td>" + 
-					"<td><p>Метка</p></td>" + 
-					"</tr>");
+			//System.out.println("Retrieveing competitors");
+			out.print("<div class=\"table-responsive\"><table class=\"table\"><thead class=\" text-primary\">");		
+			out.write("<th>№</td>" + 
+					"<th>Имя</th>" + 
+					"<th>Фаимлия</th>" + 
+					"<th>Отчество</th>" + 
+					"<th>Номер</th>" + 
+					"<th>Год рождения</th>" + 
+					"<th>Пол</th>" + 
+					"<th>Метка</th></thead><tbody>");
 			int ci = cc.getCompetitorsCount();
 			if (ci != 0) {
 				for (int index = 0; index < ci; index++) {
 					int hi = index + 1;
-					out.print("<tr><td><p>"+ hi +"</p></td>" + 
-							"<td><p>" + cc.getCompetitor(index).Name + "</p></td>" + 
-							"<td><p>" + cc.getCompetitor(index).Surname +"</p></td>" + 
-							"<td><p>" + cc.getCompetitor(index).Patron +"</p></td>" + 
-							"<td><p>" + cc.getCompetitor(index).Number +"</p></td>" + 
-							"<td><p>" + cc.getCompetitor(index).BYear +"</p></td>" + 
-							"<td><p>" + cc.getCompetitor(index).Gender +"</p></td>" + 
-							"<td><p>" + cc.getCompetitor(index).EPC +"</p></td>" + 
+					out.print("<tr><td>"+ hi +"</td>" + 
+							"<td>" + cc.getCompetitor(index).Name + "</td>" + 
+							"<td>" + cc.getCompetitor(index).Surname +"</td>" + 
+							"<td>" + cc.getCompetitor(index).Patron +"</td>" + 
+							"<td>" + cc.getCompetitor(index).Number +"</td>" + 
+							"<td>" + cc.getCompetitor(index).BYear +"</td>" + 
+							"<td>" + cc.getCompetitor(index).Gender +"</td>" + 
+							"<td>" + cc.getCompetitor(index).EPC +"</td>" + 
 							"</tr>");
 				}
 			}
-			out.print("</table>");
+			out.print("</tbody></table></div>");
 			out.close();
 		}
 		
@@ -137,7 +135,7 @@ public class NewServlet extends HttpServlet{
 								cc.editCompetitor(name, surname, Pname, number, byear, radioValue, index);
 								editCompleted = true;
 							}
-						if (editCompleted) out.print("<span class=\"form-error\"> Данные участника отредактированы </span>");
+						if (editCompleted) out.print("<span class=\"form-success\"> Данные участника отредактированы </span>");
 						else out.print("<span class=\"form-error\"> Нет участника с такой меткой </span>");
 						
 					}
@@ -167,6 +165,7 @@ public class NewServlet extends HttpServlet{
 
 		//Подключение к ридеру - Tag,Register, Contest
 		if (action.equals("startRead")) {
+			System.out.println("Trying to connect to the reader");
 			//rc.COMConnect();
 			rc.TCPConnect();
 		}
@@ -187,12 +186,14 @@ public class NewServlet extends HttpServlet{
 		//Обновлене списка меток - Tag
 		if (action.equals("epcCheckAct")) {
 			//System.out.println("Epc Check: "+ timeStr);
-
-			out.print("<table><tr>"
-					+ "<td><p>№</p></td>"
-					+ "<td><p>EPC</p></td>"
-					+ "<td><p>Last seen</p></td>"
-					+ "</tr>");
+			
+			out.print("<div class=\"col-md-12\"><div class=\"card\">");
+			out.print("<div class=\"card-body\"><div class=\"table-responsive\"><table class=\"table\"><thead class=\" text-primary\">");		
+			out.print("<th>№</th>"
+					+ "<th>EPC</th>"
+					+ "<th>Last seen</th>"
+					+ "<th>Ant num</th></thead><tbody>");
+			
 			int i = rc.getUniqueTagCount();
 			
 			if (i != 0) {
@@ -232,60 +233,42 @@ public class NewServlet extends HttpServlet{
 					int hi = index + 1;
 					out.print("<tr ");
 					if (!expired) out.print("class = \"newTag\" ");
-					out.print("><td>\r\n" + 
-							"			<p>"+ hi +"</p>\r\n" + 
-							"		</td>\r\n" + 
-							"		<td>\r\n" + 
-							"			<p>" + rc.getEPC(index) + "</p>\r\n" + 
-							"		</td>\r\n" + 
-							"		<td>\r\n" + 
-							"			<p>" + rc.getLastTimestamp(index)+"</p>\r\n" + 
-							"		</td>\r\n" + 
-							"	</tr>");
+					out.print("><td>" + hi + "</td>" + 
+							"	<td>" + rc.getEPC(index) + "</td>" + 
+							"	<td>" + rc.getLastTimestamp(index) + "</td>" + 
+							"	<td>" + rc.getAntNum(index) + "</td>" + 
+							"</tr>");
 				}
 			}
-			out.print("</table>");
+			out.print("</tbody></table></div></div></div></div>");
 			out.close();
 		}
 		
 		//Вывод спсика меток из чувствительного списка для регистрации
 		if (action.equals("SensListCheck")) {
 			rc.checkExpired();
-			System.out.println("Sens List check " + timeStr);
+			//System.out.println("Sens List check " + timeStr);
 			int i = rc.getRegListCount();
 			if (i != 0) {
-				out.print("<table>	<tr>\r\n" + 
-						"		<td>\r\n" + 
-						"			<p>№</p>\r\n" + 
-						"		</td>\r\n" + 
-						"		<td>\r\n" + 
-						"			<p>EPC</p>\r\n" + 
-						"		</td>\r\n" + 
-						"		<td>\r\n" + 
-						"			<p>Last seen</p>\r\n" + 
-						"		</td>\r\n" + 
-						"	</tr>");
+				out.print("<div class=\"table-responsive\"><table class=\"table\"><thead class=\" text-primary\">");
+				out.print("<th>№</th>" + 
+						"<th>EPC</th>" + 
+						"<th>Last seen</th></thead><tbody>");
 				for (int index = 0; index < i; index++) {					
 					int hi = index + 1;			
-					out.print("	<tr><td>\r\n" + 
-							"			<p>"+ hi +"</p>\r\n" + 
-							"		</td>\r\n" + 
-							"		<td>\r\n" + 
-							"			<p ");
-					if (index==0) out.print("id = \"targetEPC\"");
-					out.print(">"+ rc.getRegEPC(index) + "</p>\r\n" + 
-							"		</td>\r\n" + 
-							"		<td>\r\n" + 
-							"			<p>" + rc.getRegTimestamp(index)+"</p>\r\n" + 
-							"		</td>\r\n" + 
-							"	</tr>");
+					out.print("<tr ");
+					if (index==0) out.print("class = \"newTag\"");
+					out.print("><td>"+ hi +"</td>" + 
+							"<td>"+ rc.getRegEPC(index) + "</td>" + 
+							"<td>" + rc.getRegTimestamp(index)+"</td>" + 
+							"</tr>");
 				}
-				out.print("</table>");
-			} else out.print("<table><tr>"
-					+ "<td><p>№</p></td>"
-					+ "<td><p>EPC</p></td>"
-					+ "<td><p>Last seen</p></td>"
-					+ "</tr></table> ");
+				out.print("</tbody></table></div>");
+				
+			} else out.print("<div class=\"table-responsive\"><table class=\"table\">"
+					+ "<thead class=\" text-primary\"><th>№</th>" 
+					+ "<th>EPC</th>" 
+					+ "<th>Last seen</th></thead><tbody></tbody></table></div>");
 			out.close();
 		}
 	}

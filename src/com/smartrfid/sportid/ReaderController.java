@@ -1,8 +1,11 @@
 package com.smartrfid.sportid;
 
 import com.clou.uhf.G3Lib.CLReader;
+import com.clou.uhf.G3Lib.Tag6C;
 import com.clou.uhf.G3Lib.ClouInterface.IAsynchronousMessage;
-import com.clou.uhf.G3Lib.Protocol.Tag_Model;
+import com.clou.uhf.G3Lib.Models.GPI_Model;
+import static com.clou.uhf.G3Lib.Enumeration.eReadType.Inventory;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -38,6 +41,7 @@ public class ReaderController implements IAsynchronousMessage {
 	int[] CompetStartTime = new int[4];
 	int[] PassedChP = new int[CompetCountConstraint];
 
+	int[] TagAntNum = new int[CompetCountConstraint];
 	int[] CurrTime = new int[4];
 	int[] CheckTime = new int[3];
 	int[] PassedTime = new int[3];
@@ -241,11 +245,11 @@ public class ReaderController implements IAsynchronousMessage {
 			conn = CLReader.CreateTcpConn(tcpParam,this);
 			try {
 				if(conn){
-					System.out.println("CHECK.");
-					CLReader._Tag6C.GetEPC_TID(tcpParam, 1, 1);
+					System.out.println("Connected.");
+					Tag6C.GetEPC(tcpParam, 3, Inventory);
 					return true;
 				} else {
-					System.out.println("connection failure!");
+					System.out.println("Connection failure!");
 					return false;
 				}
 			} catch (Exception e) {
@@ -269,7 +273,7 @@ public class ReaderController implements IAsynchronousMessage {
 			try {
 				if(conn){
 					System.out.println("connection success...");
-					CLReader._Tag6C.GetEPC_TID(commParam, 15, 1);
+					Tag6C.GetEPC(commParam,3,Inventory);
 					//CLReader._Config.SetEPCBaseBandParam(connID, basebandMode, qValue, session, searchType)
 					return true;
 				} else {
@@ -300,11 +304,16 @@ public class ReaderController implements IAsynchronousMessage {
 		else return TagLastSeen[num];
 	}
 
+	public String getAntNum(int num) {
+		if (UniqueEPCount < num) {return null;}
+		else return Integer.toString(TagAntNum[num]);
+	}
+	
 	public int getUniqueTagCount() {
 		return UniqueEPCount;
 	}
 
-	public void chNetwork() {
+	public void chNetwork() throws InterruptedException {
 		System.out.println("netw");
 		CLReader._Config.SetReaderNetworkPortParam(commParam, "192.168.0.116", "255.255.255.0", "192.168.0.1");
 	}
@@ -355,12 +364,18 @@ public class ReaderController implements IAsynchronousMessage {
 	}
 
 	@Override
-	public void OutPutEPC(Tag_Model model) {
+	public void GPIControlMsg(GPI_Model arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void OutPutTags(com.clou.uhf.G3Lib.Models.Tag_Model model) {
 		UniqueEPCTag = true;
 		UniqueRegTag = true;
-		boolean InSensList = false;
+		//boolean InSensList = false;
 		
-		System.out.println("ANTENNA NUMBER = "+model._ANT_NUM);
+		//System.out.println("ANTENNA NUMBER = "+model._ANT_NUM);
 
 		CurTime = Calendar.getInstance();
 		CurTime.setTime(new Date());
@@ -373,31 +388,33 @@ public class ReaderController implements IAsynchronousMessage {
 		for(int index = 0; index < UniqueEPC.length; ++index)
 			if (model._EPC.equals(UniqueEPC[index])) {
 				TagLastSeen[index] = timeStr;
+				TagAntNum[index] = model._ANT_NUM;
 				UniqueEPCTag = false;
 			}
 		if (UniqueEPCTag){
 			UniqueEPC[UniqueEPCount] = model._EPC;
 			TagLastSeen[UniqueEPCount] = timeStr;
+			TagAntNum[UniqueEPCount] = model._ANT_NUM;
 			UniqueEPCount++;
 		}
 
-		if (registration) {
-			for(int index2 = 0; index2 < SensListCount; ++index2)
-				if (model._EPC.equals(RegSensList[index2])) {
-					InSensList = true;
-				}
-			if (InSensList)
+		//if (registration) {
+			//for(int index2 = 0; index2 < SensListCount; ++index2)
+			//	if (model._EPC.equals(RegSensList[index2])) {
+			//		InSensList = true;
+			//	}
+			//if (InSensList)
 				for(int index = 0; index < RegListCount; ++index)	
 					if (model._EPC.equals(RegCurrList[index])) {
 						RegCurrLastSeen[index] = timeStr;
 						UniqueRegTag = false;
 					}
-			if (UniqueRegTag & InSensList){
+			if (UniqueRegTag) {//& InSensList){
 				RegCurrList[RegListCount] = model._EPC;
 				RegCurrLastSeen[RegListCount] = timeStr;
 				RegListCount++;
 			}
-		}
+		//}
 		if (contest) {
 			for(int index = 0; index < CompetitorsCount; ++index)	
 				if (model._EPC.equals(competitors[index].EPC)) {
@@ -502,5 +519,36 @@ public class ReaderController implements IAsynchronousMessage {
 					//System.out.println("CompetLastSeen[index] "+ CompetLastSeen[index]);
 				}
 		}
+		
+	}
+
+	@Override
+	public void OutPutTagsOver() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void PortClosing(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void PortConnecting(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void WriteDebugMsg(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void WriteLog(String arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
