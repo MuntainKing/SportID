@@ -13,13 +13,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+
 @WebServlet("/NewServlet")
 public class NewServlet extends HttpServlet{
 
 	ReaderController rc = new ReaderController();
 	CompetitionController cc = new CompetitionController();
+	FileController fc = new FileController();
 	Calendar current;
     String sessionID;
+    String LastCheckedEPC = "";
+    int LastSuggestedNum = -1;
     
     
 	private static final long serialVersionUID = 1L;
@@ -135,7 +139,8 @@ public class NewServlet extends HttpServlet{
 								cc.editCompetitor(name, surname, Pname, number, byear, radioValue, index);
 								editCompleted = true;
 							}
-						if (editCompleted) out.print("<span class=\"form-success\"> Данные участника отредактированы </span>");
+						if (editCompleted) {out.print("<span class=\"form-success\"> Данные участника отредактированы </span>");
+						fc.setSuggestedNumber(targetEPC, Integer.parseInt(number));}
 						else out.print("<span class=\"form-error\"> Нет участника с такой меткой </span>");
 						
 					}
@@ -155,6 +160,7 @@ public class NewServlet extends HttpServlet{
 						if (!duplicate & !duplicateCompet) { 
 							cc.addCompetitor(name, surname, Pname, number, byear, radioValue, targetEPC);
 							out.print("<span class=\"form-success\"> Участник зарегистрирован </span>");
+							fc.setSuggestedNumber(targetEPC, Integer.parseInt(number));
 						} else if (duplicateCompet == false) out.print("<span class=\"form-error\"> Участник с такими данными уже зарегистрирован </span>");
 						else out.print("<span class=\"form-error\"> Эта метка уже зарегистрирована </span>");
 					}
@@ -250,25 +256,37 @@ public class NewServlet extends HttpServlet{
 			//System.out.println("Sens List check " + timeStr);
 			int i = rc.getRegListCount();
 			if (i != 0) {
-				out.print("<div class=\"table-responsive\"><table class=\"table\"><thead class=\" text-primary\">");
+				String EPCtoReg = rc.getRegEPC(0);
+				
+				if (LastCheckedEPC.equals("") || !LastCheckedEPC.equals(EPCtoReg)) {
+					LastCheckedEPC = EPCtoReg;
+					LastSuggestedNum = fc.getSuggestedNumber(EPCtoReg);
+				}
+				
+				out.print("{\"number\":"+LastSuggestedNum+",");
+
+				
+				out.print("\"table\":\"<div class=\\\"table-responsive\\\"><table class=\\\"table\\\"><thead class=\\\" text-primary\\\">");
 				out.print("<th>№</th>" + 
 						"<th>EPC</th>" + 
 						"<th>Last seen</th></thead><tbody>");
 				for (int index = 0; index < i; index++) {					
 					int hi = index + 1;			
 					out.print("<tr ");
-					if (index==0) out.print("class = \"newTag\"");
+					if (index==0) out.print("class = \\\"tagToReg\\\"");
 					out.print("><td>"+ hi +"</td>" + 
-							"<td>"+ rc.getRegEPC(index) + "</td>" + 
+							"<td ");
+					if (index==0) out.print("id = \\\"newTag\\\"");
+					out.print(">"+ rc.getRegEPC(index) + "</td>" + 
 							"<td>" + rc.getRegTimestamp(index)+"</td>" + 
 							"</tr>");
 				}
-				out.print("</tbody></table></div>");
+				out.print("</tbody></table></div>\"}");
 				
-			} else out.print("<div class=\"table-responsive\"><table class=\"table\">"
-					+ "<thead class=\" text-primary\"><th>№</th>" 
+			} else out.print("{\"number\":-1,\"table\":\"<div class=\\\"table-responsive\\\"><table class=\\\"table\\\">"
+					+ "<thead class=\\\" text-primary\\\"><th>№</th>" 
 					+ "<th>EPC</th>" 
-					+ "<th>Last seen</th></thead><tbody></tbody></table></div>");
+					+ "<th>Last seen</th></thead><tbody></tbody></table></div>\"}");
 			out.close();
 		}
 	}

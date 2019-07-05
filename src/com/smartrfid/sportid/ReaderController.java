@@ -107,7 +107,12 @@ public class ReaderController implements IAsynchronousMessage {
 	}
 
 	public String[][] getTimeStamps(){
-		return ContestTimestamps;
+		String[][] tempStamps = new String[CompetCountConstraint][ControlPointCountConstraint];
+		tempStamps = ContestTimestamps;
+		for (int i = 0; i < CompetCountConstraint; i++) {
+			tempStamps[i][0] = "0:00:00:000";
+		}
+		return tempStamps;
 	}
 
 	public void stopCompetition() {
@@ -374,8 +379,6 @@ public class ReaderController implements IAsynchronousMessage {
 		UniqueEPCTag = true;
 		UniqueRegTag = true;
 		//boolean InSensList = false;
-		
-		//System.out.println("ANTENNA NUMBER = "+model._ANT_NUM);
 
 		CurTime = Calendar.getInstance();
 		CurTime.setTime(new Date());
@@ -383,20 +386,22 @@ public class ReaderController implements IAsynchronousMessage {
 		CurrTime[1] = CurTime.get(Calendar.MINUTE);
 		CurrTime[2] = CurTime.get(Calendar.SECOND);
 		CurrTime[3] = CurTime.get(Calendar.MILLISECOND);
-		String timeStr = String.format("%d:%02d:%02d",CurrTime[0],CurrTime[1],CurrTime[2]);
+		String timeStr = String.format("%d:%02d:%02d:%03d",CurrTime[0],CurrTime[1],CurrTime[2],CurrTime[3]);
 
-		for(int index = 0; index < UniqueEPC.length; ++index)
+		if (!contest)
+			for(int index = 0; index < UniqueEPC.length; ++index)
 			if (model._EPC.equals(UniqueEPC[index])) {
 				TagLastSeen[index] = timeStr;
 				TagAntNum[index] = model._ANT_NUM;
 				UniqueEPCTag = false;
 			}
-		if (UniqueEPCTag){
-			UniqueEPC[UniqueEPCount] = model._EPC;
-			TagLastSeen[UniqueEPCount] = timeStr;
-			TagAntNum[UniqueEPCount] = model._ANT_NUM;
-			UniqueEPCount++;
-		}
+		if (!contest)
+			if (UniqueEPCTag){
+				UniqueEPC[UniqueEPCount] = model._EPC;
+				TagLastSeen[UniqueEPCount] = timeStr;
+				TagAntNum[UniqueEPCount] = model._ANT_NUM;
+				UniqueEPCount++;
+			}
 
 		//if (registration) {
 			//for(int index2 = 0; index2 < SensListCount; ++index2)
@@ -404,11 +409,13 @@ public class ReaderController implements IAsynchronousMessage {
 			//		InSensList = true;
 			//	}
 			//if (InSensList)
-				for(int index = 0; index < RegListCount; ++index)	
+		if (!contest) 
+					for(int index = 0; index < RegListCount; ++index)	
 					if (model._EPC.equals(RegCurrList[index])) {
 						RegCurrLastSeen[index] = timeStr;
 						UniqueRegTag = false;
 					}
+		if (!contest)
 			if (UniqueRegTag) {//& InSensList){
 				RegCurrList[RegListCount] = model._EPC;
 				RegCurrLastSeen[RegListCount] = timeStr;
@@ -416,6 +423,7 @@ public class ReaderController implements IAsynchronousMessage {
 			}
 		//}
 		if (contest) {
+			if (model._ANT_NUM == 1) {
 			for(int index = 0; index < CompetitorsCount; ++index)	
 				if (model._EPC.equals(competitors[index].EPC)) {
 					CompFoundIndex = index; // найденная метка принадлежит участнику
@@ -518,6 +526,7 @@ public class ReaderController implements IAsynchronousMessage {
 					CompetLastSeen[CompFoundIndex] = PasstimeStr;
 					//System.out.println("CompetLastSeen[index] "+ CompetLastSeen[index]);
 				}
+		}
 		}
 		
 	}

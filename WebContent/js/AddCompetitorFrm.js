@@ -14,7 +14,7 @@ $(document).ready(function(){
 			var edit = false;
 		}
 		try{
-		var targetEPC = document.getElementById("targetEPC").innerHTML;
+		var targetEPC = document.getElementById("newTag").innerHTML;
 		$.ajax({
 			type:'POST',
 			data: {action: 'saveCompetitor',

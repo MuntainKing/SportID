@@ -144,7 +144,7 @@
 												</div>
 											</div>
 											<div class="col-md-6">
-												<div class="form-group bmd-form-group">
+												<div id = "numbDiv" class="form-group bmd-form-group">
 													<label class="bmd-label-floating">Номер</label>
 													<input class="form-control" type="text" id="number" name="number">
 												</div>

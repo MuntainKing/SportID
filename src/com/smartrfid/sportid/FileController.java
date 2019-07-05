@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+
 
 public class FileController {
 	int listCount = 0;
@@ -20,6 +22,8 @@ public class FileController {
 	private static final String Separator = ";";
 	private static final String CompetitorsListPath = "/usr/tomcat9/apache-tomcat-9.0.21/webapps/files/reglist/";
 	private static final String ResultsPath = "/usr/tomcat9/apache-tomcat-9.0.21/webapps/files/results/";
+	//private static final String TagNumberPath = "/usr/tomcat9/apache-tomcat-9.0.21/webapps/files/tagnumber/suggest.gg";
+	private static final String TagNumberPath = "C:\\Work\\Copy\\suggest.gg";
 	//private static final String ResultCodesPath = "/usr/lib/tomcat9/apache-tomcat-9.0.20/codes/results.csv";
 	//private static final String ReglistCodesPath = "/usr/lib/tomcat9/apache-tomcat-9.0.20/codes/results.csv";
     
@@ -39,7 +43,64 @@ public class FileController {
 	public int getCompetCount() {
 		return CompetCount;
 	}
+	
+	public int getSuggestedNumber(String EPC) {
+		int SuggestedNum = -1;
+		String[] lineSpl;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(TagNumberPath));
+			String line = reader.readLine();
+			while (line != null) {
+				System.out.println(line);
+				lineSpl = line.split(Separator);
+				if (lineSpl[0].equals(EPC)) SuggestedNum = Integer.parseInt(lineSpl[1]);
+				line = reader.readLine();
+			}
+			reader.close();
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
 
+		}
+		System.out.println("Suggesting " + SuggestedNum);
+		return SuggestedNum;
+	}
+	
+	public void setSuggestedNumber(String EPC, int Num) {
+		
+		System.out.println("Saving suggested number " + Num + " for EPC " + EPC);
+		boolean uniq = true;
+		StringBuffer inputBuffer = new StringBuffer();
+		
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(TagNumberPath));
+			String line = reader.readLine();
+			line = reader.readLine();
+			String[] lineSpl;
+			while ((line = reader.readLine()) != null) {
+				
+				System.out.println(line);
+				
+				lineSpl = line.split(Separator);
+				if (lineSpl[0].equals(EPC)) {uniq = false; line = EPC + Separator + Num;}
+				inputBuffer.append(line);
+		        inputBuffer.append('\n');
+			}
+			reader.close();
+			
+			File file = new File(TagNumberPath);
+			OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(file,true),Charset.forName("UTF-8").newEncoder());
+			os.write(inputBuffer.toString());
+			if (uniq) {
+				os.append(EPC);
+				os.append(Separator);
+				os.append(Integer.toString(Num));
+				os.append("\n");
+			}	
+			os.close();
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}		
+	}
 	
 	//Сохранить список результатов в файл с именем
 	public void SaveResult(String contestNameString, Competitor[] list, String[][] finalistTableStrings, int compCount) throws Exception {
